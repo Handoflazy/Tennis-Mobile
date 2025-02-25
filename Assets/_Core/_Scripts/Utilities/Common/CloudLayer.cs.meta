@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: d25d0a067276f194c86ae4a9fb28adc2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 221357
+  packageName: Green Meadows - Stylized Environment URP
+  packageVersion: 1.0
+  assetPath: Assets/Ilumisoft/Green Meadows/Scripts/CloudLayer.cs
+  uploadId: 501268
