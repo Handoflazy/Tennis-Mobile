@@ -14867,7 +14867,6 @@ MonoBehaviour:
   circle: {fileID: 4797148298980642068}
   flames: {fileID: 1011909821049402888}
   flameMat: {fileID: 2100000, guid: 8ff3f9622c8b36741b7ff712580e7484, type: 2}
-  anim: {fileID: 0}
   brokenFloor: {fileID: 2381766125686408372, guid: 89a1bffbccfad4b4bbe40199883961c0, type: 3}
   wrongSlideEffect: {fileID: 4099383157199073047, guid: e138985d07fc4d6469f80abd3f3381bc, type: 3}
 --- !u!95 &6711092024995089015
@@ -14900,6 +14899,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5269112467711570913}
+  - component: {fileID: 2199281423738463208}
   m_Layer: 0
   m_Name: Circle holder
   m_TagString: Untagged
@@ -14923,6 +14923,18 @@ Transform:
   m_Father: {fileID: 6711092024995089014}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2199281423738463208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8169961750800672045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2b73437c0474602b42b9cd60031fd2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8729755102276157961
 GameObject:
   m_ObjectHideFlags: 0

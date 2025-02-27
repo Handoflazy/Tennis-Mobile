@@ -1,6 +1,8 @@
-﻿using Eflatun.SceneReference;
+﻿using System;
+using Eflatun.SceneReference;
 using TMPro;
 using UnityEngine;
+using UnityServiceLocator;
 
 namespace _Core._Scripts
 {
@@ -63,5 +65,17 @@ namespace _Core._Scripts
 	
         bool resetting;
         bool playerServe;
+        
+        private void Awake() {
+            ServiceLocator.ForSceneOf(this).Register(this);
+        }
+
+        public void FireBall() {
+            Debug.Log("FireBall");
+        }
+
+        public void Out() {
+            Debug.Log("Out");
+        }
     }
 }
