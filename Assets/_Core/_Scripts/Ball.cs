@@ -21,7 +21,7 @@ public class Ball : MonoBehaviour
     private bool playerHit;
     private GameManager gameManager;
     
-    private int pausedHash = Animator.StringToHash("Paused");
+    private readonly int pausedHash = Animator.StringToHash("Paused");
 
     private void Start() {
         flames.SetActive(false);
@@ -60,13 +60,11 @@ public class Ball : MonoBehaviour
         gameManager.Out();
     }
 
-    void Grown() {
-        transform.DOScale(0.7F, 0.2F);
-    }
+    void Grown() => transform.DOScale(0.7F, 0.2F);
 
     public void Flames() {
-        flames.SetActive(true);
         GetComponent<MeshRenderer>().material = flameMat;
+        flames.SetActive(true);
         circle.gameObject.SetActive(false);
         Grown();
     }

@@ -7451,6 +7451,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball powerup
       objectReference: {fileID: 0}
+    - target: {fileID: 3118407606029577818, guid: 86a6a161d94bfec49bf4a074c8125fe0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86a6a161d94bfec49bf4a074c8125fe0, type: 3}
 --- !u!1 &1353474297
@@ -17146,7 +17150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6711092024995089014, guid: 7bb80ce60ca70b24ea2b2f89af7cd46c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.943
+      value: 1.42
       objectReference: {fileID: 0}
     - target: {fileID: 6711092024995089014, guid: 7bb80ce60ca70b24ea2b2f89af7cd46c, type: 3}
       propertyPath: m_LocalPosition.y
