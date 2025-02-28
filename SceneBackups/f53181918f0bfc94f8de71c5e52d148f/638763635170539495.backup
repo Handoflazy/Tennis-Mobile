@@ -14873,17 +14873,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1785339566}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1796731946 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5788654723674262533, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
-  m_PrefabInstance: {fileID: 3698379741122613556}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1800080792
 GameObject:
   m_ObjectHideFlags: 0
@@ -16994,25 +16983,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2147212607}
     - target: {fileID: 3698379741122613559, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
-      propertyPath: showBar
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3698379741122613559, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
       propertyPath: uiManager
       value: 
       objectReference: {fileID: 1800080797}
-    - target: {fileID: 3698379741122613559, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
-      propertyPath: maxDragTime
-      value: 1.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3698379741122613559, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
-      propertyPath: dragDistance
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 3698379741122613559, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
-      propertyPath: indicatorFill
-      value: 
-      objectReference: {fileID: 1796731946}
     - target: {fileID: 3698379741122613561, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
       propertyPath: availableIcon
       value: 
@@ -17021,14 +16994,6 @@ PrefabInstance:
       propertyPath: startPanelCanvasGroup
       value: 
       objectReference: {fileID: 427335614}
-    - target: {fileID: 5788654723674262533, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
-      propertyPath: m_FillAmount
-      value: 0.566
-      objectReference: {fileID: 0}
-    - target: {fileID: 8039014916902792860, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
-      propertyPath: m_FillAmount
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
 --- !u!1 &4629565890358874729

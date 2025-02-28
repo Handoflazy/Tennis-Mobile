@@ -16,8 +16,8 @@ public class Ball : MonoBehaviour
     [SerializeField] private Material flameMat;
     [SerializeField] private GameObject brokenFloor;
     [SerializeField] private GameObject wrongSlideEffect;
-
-    private bool inactive;
+    [HideInInspector]
+    public bool inactive;
     private bool playerHit;
     private GameManager gameManager;
     
@@ -27,11 +27,7 @@ public class Ball : MonoBehaviour
         flames.SetActive(false);
         ServiceLocator.ForSceneOf(this).Get<GameManager>(out gameManager);
     }
-
-    private void Update() {
-        if(circle.GetBool(pausedHash) != rb.isKinematic)
-            circle.SetBool(pausedHash, rb.isKinematic);
-    }
+    
 
     private void OnCollisionEnter(Collision other) {
         if(!other.gameObject.CompareTag("Ground"))
@@ -54,7 +50,15 @@ public class Ball : MonoBehaviour
     public void SetLastHit(bool player) {
         playerHit = player;
     }
+    public void SetKinematic(bool value) {
+        rb.isKinematic = value;
+        circle.SetBool(pausedHash, value);
+    }
 
+    public Vector3 Velocity {
+        get => rb.velocity;
+        set => rb.velocity = value;
+    }
     private void Out() {
         Instantiate(wrongSlideEffect,transform.position - Vector3.up*offset,wrongSlideEffect.transform.rotation);
         gameManager.Out();

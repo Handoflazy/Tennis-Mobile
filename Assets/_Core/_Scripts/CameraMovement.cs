@@ -9,5 +9,9 @@ namespace _Core._Scripts
         public Transform ball;
         public float smoothSpeed = 0.125f;
         public Vector3 offset;
+
+        public void Zoom(bool zoom) {
+            
+        }
     }
 }

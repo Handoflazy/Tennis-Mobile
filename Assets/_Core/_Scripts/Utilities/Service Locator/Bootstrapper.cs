@@ -24,17 +24,4 @@ namespace UnityServiceLocator
 
         protected abstract void Bootstrap();
     }
-    [AddComponentMenu("Service Locator/Service Locator Global Bootstrapper")]
-    public class ServiceLocatorGlobalBootstrapper : Bootstrapper {
-        [SerializeField] bool dontDestroyOnLoad = true;
-        protected override void Bootstrap() {
-            Container.ConfigureAsGlobal(dontDestroyOnLoad);
-        }
-    }
-    [AddComponentMenu("Service Locator/Service Locator Scene Bootstrapper")]
-    public class ServiceLocatorSceneBootstrapper : Bootstrapper {
-        protected override void Bootstrap() {
-            Container.ConfigureAsScene();
-        }
-    }
 }
