@@ -3,6 +3,7 @@ using System.Collections;
 using _Core._Scripts;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -14,26 +15,32 @@ using Random = UnityEngine.Random;
 public class Player : MonoBehaviour
 {
     [SerializeField] private PlayerData data;
-    [SerializeField] private PlayerSoundPlayer soundPlayer;
-    [SerializeField] private UIManager uiManager;
+    [SerializeField] private SoundPlayer soundPlayer;
+    [HideInInspector]public UIManager uiManager;
     [SerializeField] private float K_crossFade = 0.1f;
-    [SerializeField] private CameraMovement cameraMovement;
+    [HideInInspector] public CameraMovement cameraMovement;
 
-    public Animator anim;
-    public Transform head;
-    public Transform lookAt;
-    public ParticleSystem moveParticles;
+    [SerializeField] Transform arrowHolder;
+    [SerializeField] Animator anim;
+    [SerializeField]  Transform head;
+    public  Transform lookAt;
+    [SerializeField]  ParticleSystem moveParticles;
     public Ball ball;
-    public Animator indicator;
-    public Animator rangeCircle;
-    public Image indicatorFill;
-    public Transform opponent;
-    public Transform ballPosition;
-
+    [SerializeField]  Animator indicator;
+    [SerializeField]  Animator rangeCircle;
+    [SerializeField]  Image indicatorFill;
+    [SerializeField]  Opponent opponent;
+    [SerializeField]  Transform ballPosition;
+    [HideInInspector]
+    public GameObject scoreTexts;
+    int moveRange;
+    [HideInInspector]
+    public GameObject matchLabel;
     [HideInInspector] public Animator comboLabel;
-    [HideInInspector] public Text comboNumberLabel;
+    [HideInInspector] public TextMeshProUGUI comboNumberLabel;
     [HideInInspector] public Animator swipeLabel;
-
+    public EncouragingText encouragingTexts;
+    
     private bool shoot;
     private bool canShoot;
     private float rotation;
@@ -45,7 +52,7 @@ public class Player : MonoBehaviour
     private Vector3 startVelocity;
     [SerializeField] private float maxDragTime;
     [SerializeField] private float dragDistance;
-
+    private float swipeSensitivity;
     private CountdownTimer dragTimer;
     private bool max;
     public bool right;
@@ -77,12 +84,13 @@ public class Player : MonoBehaviour
 
     private void LateUpdate()
     {
-        //head.LookAt(lookAt.position);
+        if(lookAt)
+            head.LookAt(lookAt.position);
     }
 
     private void CheckBallRange()
     {
-        float zDistance = ball == null ? 0 : Mathf.Abs(transform.position.z - ball.gameObject.transform.position.z);
+        float zDistance = !ball ? 0 : Mathf.Abs(transform.position.z - ball.gameObject.transform.position.z);
         if (showBar || (zDistance < data.BallRange && !ball.inactive))
         {
             CanHitBall();
@@ -95,8 +103,8 @@ public class Player : MonoBehaviour
 
     private void CanHitBall()
     {
-        if (rangeCircle.GetBool("Show")) return;
-        rangeCircle.SetBool("Show", true);
+        if (rangeCircle.GetBool(AnimConst.ShowParam)) return;
+        rangeCircle.SetBool(AnimConst.ShowParam, true);
     }
 
     private void Move()
@@ -105,27 +113,21 @@ public class Player : MonoBehaviour
         float dist = Vector3.Distance(transform.position, targetPosition);
         moving = dist > 0.1f && !rangeCircle.GetBool(AnimConst.ShowParam);
 
-        if (moving)
-        {
+        if (moving) {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * data.Speed);
             right = targetPosition.x < transform.position.x;
         }
 
-        if (!moving)
-        {
+        if (!moving) {
             rotation = 180;
             if (moveParticles.isPlaying) moveParticles.Stop();
         }
-        else
-        {
+        else {
             rotation = right ? -90 : 91;
             if (!moveParticles.isPlaying) moveParticles.Play();
         }
-
         PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.RunLeftState) : AnimConst.IdleState);
-
-        if (Math.Abs(rotation - transform.eulerAngles.y) >= 5)
-        {
+        if (Math.Abs(rotation - transform.eulerAngles.y) >= 5) {
             Vector3 rot = transform.eulerAngles.With(y: rotation);
             transform.DORotate(rot, 10).SetEase(Ease.InSine);
         }
@@ -190,7 +192,7 @@ public class Player : MonoBehaviour
                 indicator.SetBool(AnimConst.ActiveParam, true);
                 indicatorFill.fillAmount = 0;
                 delta = 1f;
-                //cameraMovement.Zoom(true);
+                cameraMovement.Zoom(true);
             }
 
             float fillSpeed = indicatorFill.fillAmount < 0.2f ? 0.2f : indicatorFill.fillAmount;
@@ -205,8 +207,81 @@ public class Player : MonoBehaviour
             if (indicator.GetBool(AnimConst.ActiveParam)) indicator.SetBool(AnimConst.ActiveParam, false);
         }
     }
-
+    
     private void Hit(Vector3 currentPos) {
-        // Implement hit logic here
+        if(lastFillAmount < 0){
+            PlayAnimation(AnimConst.HitRightState);
+            soundPlayer.PlayHitBallSound();
+        }
+        else{
+            gameManager.Serve();
+            cameraMovement.Zoom(false);
+            showBar = false;
+        }
+        if(!cameraMovement.enabled){
+            cameraMovement.enabled = true;
+            uiManager.HideStartPanel();
+            uiManager.ShowGamePanel();
+            if(scoreTexts is not null) {
+                scoreTexts.SetActive(true);
+                matchLabel.SetActive(false);
+            }
+        }
+        float delta = currentPos.x - startPos.x;
+        float xPos = swipeSensitivity*-delta;
+        xPos = Mathf.Clamp(xPos, -data.MoveRange, data.MoveRange);
+        Vector3 random = new Vector3(xPos, 0, opponent.gameObject.transform.position.z);
+        ball.SetLastHit(true);
+        Vector3 direction = (random - transform.position).normalized;
+        opponent.SetTarget(random);
+        arrowHolder.LookAt(random);
+        
+        if(lastFillAmount < 0){
+            ball.Velocity = direction * data.Force + Vector3.up * data.UpForce;
+        }
+        else{			
+            StartCoroutine(ServeAnim(direction, lastFillAmount > 0.8f));
+			
+            canShoot = false;
+            StartCoroutine(DisableShooting());
+			
+            return;
+        }
+
+        ball.SetKinematic(false);
+        canShoot = false;
+        StartCoroutine(cameraMovement.Shake(0.12f, 0.5f));
+        StartCoroutine(DisableShooting());
     }
+    
+    IEnumerator ServeAnim(Vector3 direction, bool powerShot) {
+        PlayAnimation(powerShot ? AnimConst.PowerServeState : AnimConst.ServeState);
+        yield return new WaitForSeconds(0.28f);
+        float barForce = data.Force * 0.8f + (data.Force * lastFillAmount * 0.3f);
+        ball.Velocity = direction * barForce + Vector3.up * data.UpForce;
+        encouragingTexts.ShowText(lastFillAmount);
+    }
+    IEnumerator DisableShooting(){
+        shoot = false;
+        yield return new WaitForSeconds(.7f);
+        shoot = true;
+    }
+
+    public void SetBar(bool active) => showBar = active;
+
+    public void SetTargetPosition(Vector3 target) => targetPosition = target;
+
+    public void ComboDone(Ball ball) {
+        if(ball) {
+            ball.Flames();
+            soundPlayer.PlayFireSound();
+        }
+    }
+
+    public void Reset() {
+        SetTargetPosition(transform.position.With(x:0));
+        rangeCircle.SetBool(AnimConst.ShowParam, false);
+        ComboDone(null);
+    }
+    public void SetOpponent(Opponent opponent) => this.opponent = opponent;
 }

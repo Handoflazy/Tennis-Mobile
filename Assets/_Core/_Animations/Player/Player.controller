@@ -260,7 +260,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit_left_right
+  m_Name: Hit_right
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -286,7 +286,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Hit_left_left
+  m_Name: Hit_left
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

@@ -32,4 +32,8 @@ public class UIManager : MonoBehaviour
     public void HideGamePanel() {
         gamePanel.gameObject.SetActive(false);
     }
+
+    public void ShowGamePanel() {
+        gamePanel.gameObject.SetActive(true);
+    }
 }

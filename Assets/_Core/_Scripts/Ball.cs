@@ -50,6 +50,9 @@ public class Ball : MonoBehaviour
     public void SetLastHit(bool player) {
         playerHit = player;
     }
+    public bool GetLastHit() {
+        return playerHit;
+    }
     public void SetKinematic(bool value) {
         rb.isKinematic = value;
         circle.SetBool(pausedHash, value);
@@ -71,5 +74,8 @@ public class Ball : MonoBehaviour
         flames.SetActive(true);
         circle.gameObject.SetActive(false);
         Grown();
+    }
+    public bool IsFlame() {
+        return flames.activeSelf;
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
-public class PlayerSoundPlayer: MonoBehaviour {
+public class SoundPlayer: MonoBehaviour {
     RandomPitch randomPitch;
     AudioSource source;
 
@@ -12,7 +12,7 @@ public class PlayerSoundPlayer: MonoBehaviour {
         source = GetComponent<AudioSource>();
     }
 
-    void SetRandomPitchAndPlay() {
+    public void SetRandomPitchAndPlay() {
         randomPitch.Set();
         source.Play();
     }

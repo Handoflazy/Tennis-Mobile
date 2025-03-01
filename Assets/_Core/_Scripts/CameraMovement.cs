@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using Utilities.Extensions;
 using Random = UnityEngine.Random;
@@ -36,7 +38,6 @@ namespace _Core._Scripts
         }
 
         public IEnumerator Shake(float duration, float amount){
-		
             float elapsed = 0f;
 		
             while(elapsed < duration){
@@ -50,6 +51,11 @@ namespace _Core._Scripts
 			
                 yield return 0;
             }
+        }
+
+        [Button]
+        public void TestShake() {
+            StartCoroutine(Shake(.2f, 1.2f));
         }
         public void Zoom(bool zoomIn) {
             if(zoomIn){
