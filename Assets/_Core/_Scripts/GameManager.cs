@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections;
+using _Core._Scripts.Utilities.Extensions;
+using DG.Tweening;
 using Eflatun.SceneReference;
 using TMPro;
 using UnityEngine;
 using UnityServiceLocator;
+using Utilities.Extensions;
 using Random = UnityEngine.Random;
 
 namespace _Core._Scripts
@@ -37,9 +40,7 @@ namespace _Core._Scripts
         [SerializeField] private GameObject[] confetti;
         [SerializeField] TextMeshProUGUI playerPointsLabel;
         [SerializeField] TextMeshProUGUI opponentPointsLabel;
-        [SerializeField] Animator playerPointsAnim;
-        [SerializeField] Animator opponentPointsAnim;
-        [SerializeField] Animator matchPoint;
+        [SerializeField] GameObject matchPoint;
         
         public ColorScheme[] colorSchemes;
         public Material floor;
@@ -52,13 +53,6 @@ namespace _Core._Scripts
         public GameObject vibrateLine;
         public Animator pausePanel;
         public GameObject characterAvailableIcon;
-        
-        [Header("Bonus scene only")]
-        public bool bonus;
-        public Animator bonuspopup;
-        public TextMeshProUGUI bonuspopupLabel;
-        public TextMeshProUGUI diamondsLabel;
-        public Animator diamondLabelAnim;
         
         public int maxBonusTargets;
         bool useHapticFeedback;
@@ -74,9 +68,11 @@ namespace _Core._Scripts
         private void Awake() {
             ServiceLocator.ForSceneOf(this).Register(this);
             canvas.SetActive(true);
+            pausePanel.gameObject.SetActive(false);
         }
 
         private void Start() {
+            matchPoint.gameObject.SetActive(false);
             foreach(GameObject conf in confetti){
                 conf.SetActive(false);
             }
@@ -92,7 +88,6 @@ namespace _Core._Scripts
             }*/
 
         }
-
         private void SetAudio(bool change) {
             int audio = PlayerPrefs.GetInt("Audio");
             if(change){
@@ -157,11 +152,11 @@ namespace _Core._Scripts
                     conf.SetActive(true);
                     yield return new WaitForSeconds(0.15f);
                 }
-                playerPointsAnim.SetTrigger(AnimConst.EffectParam);
+                playerPointsLabel.rectTransform.DOScaleY(1.2f, 0.25f).SetEase(Ease.OutBack).OnComplete(() => playerPointsLabel.rectTransform.DOScaleY(1f, 0.25f));
             }
             else
             {
-                opponentPointsAnim.SetTrigger(AnimConst.EffectParam);
+                opponentPointsLabel.rectTransform.DOScaleY(1.2f, 0.25f).SetEase(Ease.OutBack).OnComplete(() => playerPointsLabel.rectTransform.DOScaleY(1f, 0.25f));
             }
             yield return new WaitForSeconds(1f/6f);
             opponentPointsLabel.text = "" + opponentPoints;
@@ -177,10 +172,15 @@ namespace _Core._Scripts
             else if(playerPoints == pointsToWin - 1 || opponentPoints == pointsToWin - 1){
                 yield return new WaitForSeconds(0.5f);
 			
-                matchPoint.SetTrigger(AnimConst.ShowParam);  
+                matchPoint.gameObject.SetActive(true);
+                matchPoint.transform.localScale = Vector3.one.With(y: 0);
+                yield return matchPoint.transform.DOScaleY(1, 1f).SetEase(Ease.OutBack)
+                    .OnComplete(() => matchPoint.transform.DOScaleY(0, 0.8f).SetEase(Ease.InBack))
+                    .WaitForCompletion();
+                matchPoint.gameObject.SetActive(false);
                 audioManager.PlaySuccess();
                 
-                yield return new WaitForSeconds(0.5f);
+                //yield return new WaitForSeconds(0.5f);
             }
             yield return new WaitForSeconds(1f);
             foreach(GameObject conf in confetti){
@@ -199,6 +199,8 @@ namespace _Core._Scripts
             else{
                 player.SetBar(true);
             }
+            Destroy(ballScript.gameObject);
+            resetting = false;
         }
         public IEnumerator Done(bool wonMatch){
             transition.SetTrigger(AnimConst.TransitionParam);
@@ -216,14 +218,14 @@ namespace _Core._Scripts
 		
             //SceneManager.LoadScene(winScene);
         }
+        // ReSharper disable Unity.PerformanceAnalysis
         IEnumerator OpponentServe(){
-            countDown.SetTrigger(AnimConst.CountdownParam);
-		
+            countDown.PlayAnimation("Countdown serve play");
             yield return new WaitForSeconds(3f);
 		
             StartCoroutine(opponent.JustHit());
 		
-            opponent.anim.SetTrigger(AnimConst.ServeParam);
+            opponent.anim.PlayAnimation(AnimConst.ServeState);
 		
             yield return new WaitForSeconds(0.28f);
             Serve();
@@ -254,6 +256,22 @@ namespace _Core._Scripts
         }
         public void SetOpponent(Opponent opponent) {
             this.opponent = opponent;
+        }
+
+        public void Pause() {
+            pausePanel.gameObject.SetActive(!pausePanel.gameObject.activeSelf);
+            pausePanel.Play("Pause panel fade in");
+            StartCoroutine(Freeze(pausePanel.gameObject.activeSelf));
+        }
+        IEnumerator Freeze(bool freeze){
+            if(freeze){
+                yield return new WaitForSeconds(1f/3f);
+			
+                Time.timeScale = 0;
+            }
+            else{
+                Time.timeScale = 1;
+            }
         }
     }
 }

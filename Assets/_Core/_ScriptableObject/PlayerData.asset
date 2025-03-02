@@ -15,7 +15,7 @@ MonoBehaviour:
   Description: 
   speed: 8
   turnSpeed: 6
-  ballRange: 4
+  ballRange: 3
   force: 12
   upForce: 8.5
   moveRange: 4.3

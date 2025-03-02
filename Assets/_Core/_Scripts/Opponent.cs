@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using _Core._Scripts;
+using _Core._Scripts.Utilities.Extensions;
 using UnityEngine.UI;
 using UnityEngine;
 using UnityServiceLocator;
@@ -85,9 +86,6 @@ public class Opponent : MonoBehaviour {
 
 			right = target.x > transform.position.x;
 		}
-		
-		PlayAnimation(AnimConst.RunRightState);
-		
 		if(!moving){
 			rotation = 0;
 			
@@ -107,7 +105,8 @@ public class Opponent : MonoBehaviour {
 		}
 		
 		//update the animator value to display the correct animation
-		PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.IdleState) : AnimConst.IdleState);
+		if(!anim.IsAnimationPlaying(AnimConst.ServeState)&&anim.GetCurrentAnimatorStateInfo(0).normalizedTime>0.6f)
+			anim.PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.RunLeftState) : AnimConst.IdleState);
 		if(notRotating)
 			return;
 		
@@ -127,23 +126,14 @@ public class Opponent : MonoBehaviour {
 		
 		if(xDistance > 1.3f){
 			if(Random.Range(0, 2) == 0)
-				PlayAnimation(AnimConst.HitRightState);
-			
+				anim.PlayAnimation(AnimConst.HitRightState);
 			return;
 		}
 		
 		StartCoroutine(JustHit());
 		
-		PlayAnimation(AnimConst.HitRightState);
+		anim.PlayAnimation(AnimConst.HitRightState);
 		HitBall(false, null);
-		
-		Target targetController = GetComponentInChildren<Target>();
-		
-		if(targetController != null){
-			targetController.Hit();
-			
-			gameManager.AddBonus();
-		}
 	}
 	
 	//shoot the ball in a random direction and update the ball and the player
@@ -183,12 +173,5 @@ public class Opponent : MonoBehaviour {
 	
 	public void Reset() {
 		SetTarget(transform.position.With(x:0));
-	}
-	string currentAnimation;
-	void PlayAnimation(string state){
-		if(currentAnimation == state)
-			return;
-		currentAnimation = state;
-		anim.Play(state);
 	}
 }

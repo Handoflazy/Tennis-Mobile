@@ -26,7 +26,7 @@ public class LoadCharacters : MonoBehaviour
 	[SerializeField,Required] Player playerPrefab;
 	[SerializeField,Required] Opponent opponentPrefab;
 
-	private void Start() {
+	private void Awake() {
 		if(playerPrefab == null || opponentPrefab == null){
 			Debug.LogWarning("No player/opponent prefab in resources");
 		}

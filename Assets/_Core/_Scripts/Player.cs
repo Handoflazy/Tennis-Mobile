@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using _Core._Scripts;
+using _Core._Scripts.Utilities.Extensions;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using TMPro;
@@ -41,7 +42,7 @@ public class Player : MonoBehaviour
     [HideInInspector] public Animator swipeLabel;
     public EncouragingText encouragingTexts;
     
-    private bool shoot;
+    private bool shoot = true;
     private bool canShoot;
     private float rotation;
     private float powerBarSpeed;
@@ -52,6 +53,7 @@ public class Player : MonoBehaviour
     private Vector3 startVelocity;
     [SerializeField] private float maxDragTime;
     [SerializeField] private float dragDistance;
+    [SerializeField]
     private float swipeSensitivity;
     private CountdownTimer dragTimer;
     private bool max;
@@ -126,7 +128,8 @@ public class Player : MonoBehaviour
             rotation = right ? -90 : 91;
             if (!moveParticles.isPlaying) moveParticles.Play();
         }
-        PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.RunLeftState) : AnimConst.IdleState);
+        if(!anim.IsAnimationPlaying(AnimConst.ServeState)&&anim.GetCurrentAnimatorStateInfo(0).normalizedTime>0.6f)
+            anim.PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.RunLeftState) : AnimConst.IdleState);
         if (Math.Abs(rotation - transform.eulerAngles.y) >= 5) {
             Vector3 rot = transform.eulerAngles.With(y: rotation);
             transform.DORotate(rot, 10).SetEase(Ease.InSine);
@@ -175,14 +178,6 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
         max = false;
     }
-
-    private void PlayAnimation(string stateAnim)
-    {
-        if (currentAnimState == stateAnim) return;
-        currentAnimState = stateAnim;
-        anim.CrossFade(stateAnim, K_crossFade);
-    }
-
     private void HandlePowerBar()
     {
         if (showBar)
@@ -210,7 +205,7 @@ public class Player : MonoBehaviour
     
     private void Hit(Vector3 currentPos) {
         if(lastFillAmount < 0){
-            PlayAnimation(AnimConst.HitRightState);
+            anim.PlayAnimation(AnimConst.HitRightState);
             soundPlayer.PlayHitBallSound();
         }
         else{
@@ -227,17 +222,20 @@ public class Player : MonoBehaviour
                 matchLabel.SetActive(false);
             }
         }
-        float delta = currentPos.x - startPos.x;
-        float xPos = swipeSensitivity*-delta;
+        float deltaX = currentPos.x - startPos.x;
+        float xPos = swipeSensitivity *-deltaX;
         xPos = Mathf.Clamp(xPos, -data.MoveRange, data.MoveRange);
-        Vector3 random = new Vector3(xPos, 0, opponent.gameObject.transform.position.z);
+        
+        Vector3 random = new(xPos, 0, opponent.gameObject.transform.position.z);
         ball.SetLastHit(true);
+        
         Vector3 direction = (random - transform.position).normalized;
         opponent.SetTarget(random);
         arrowHolder.LookAt(random);
         
         if(lastFillAmount < 0){
-            ball.Velocity = direction * data.Force + Vector3.up * data.UpForce;
+            var force = direction * data.Force + Vector3.up * data.UpForce;
+            ball.Velocity = force;
         }
         else{			
             StartCoroutine(ServeAnim(direction, lastFillAmount > 0.8f));
@@ -252,13 +250,14 @@ public class Player : MonoBehaviour
         canShoot = false;
         StartCoroutine(cameraMovement.Shake(0.12f, 0.5f));
         StartCoroutine(DisableShooting());
-    }
+    }   
     
     IEnumerator ServeAnim(Vector3 direction, bool powerShot) {
-        PlayAnimation(powerShot ? AnimConst.PowerServeState : AnimConst.ServeState);
+        anim.PlayAnimation(powerShot ? AnimConst.PowerServeState : AnimConst.ServeState);
         yield return new WaitForSeconds(0.28f);
         float barForce = data.Force * 0.8f + (data.Force * lastFillAmount * 0.3f);
         ball.Velocity = direction * barForce + Vector3.up * data.UpForce;
+        Debug.Log(ball.Velocity);
         encouragingTexts.ShowText(lastFillAmount);
     }
     IEnumerator DisableShooting(){

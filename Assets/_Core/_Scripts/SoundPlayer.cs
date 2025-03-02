@@ -22,7 +22,7 @@ public class SoundPlayer: MonoBehaviour {
     }
 
     public void PlayHitBallSound() {
-        source.clip = fireSound;
+        source.clip = hitBallSound;
         SetRandomPitchAndPlay();
     }
 }

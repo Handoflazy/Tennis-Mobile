@@ -24,14 +24,22 @@ namespace _Core._Scripts
         private void LateUpdate() {
             if(!camTarget)
                 return;
+		
             Vector3 angle = transform.localEulerAngles;
-            if(angle.x < 37) {
+		
+            if(angle.x < 37){
                 angle.x += Time.deltaTime * 40;
                 transform.localEulerAngles = angle;
             }
-            Vector3 pos = camTarget.position.Add(y: height, z: -distance);
+		
+            Vector3 pos = Vector3.zero;
+            pos.x = camTarget.position.x;
+            pos.y = camTarget.position.y + height;
+            //pos.y = transform.position.y;
+            pos.z = camTarget.position.z - distance;
+		
             transform.position = Vector3.SmoothDamp(transform.position, pos, ref velocity, smoothness);
-            
+		
             Vector3 rotation = transform.eulerAngles;
             rotation.y = -180 + (camTarget.position.x * rotationForce);
             transform.eulerAngles = rotation;
@@ -52,11 +60,7 @@ namespace _Core._Scripts
                 yield return 0;
             }
         }
-
-        [Button]
-        public void TestShake() {
-            StartCoroutine(Shake(.2f, 1.2f));
-        }
+        
         public void Zoom(bool zoomIn) {
             if(zoomIn){
                 height *= zoomHeightMultiplier;

@@ -14744,10 +14744,9 @@ GameObject:
   - component: {fileID: 6711092024995089003}
   - component: {fileID: 6711092024995089013}
   - component: {fileID: 6711092024995089012}
-  - component: {fileID: 6711092024995089015}
   m_Layer: 0
   m_Name: Ball
-  m_TagString: Untagged
+  m_TagString: Ball
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14827,7 +14826,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6711092024995089002}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 4a2151ad6a136a44296e75dac95729c4, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -14869,27 +14868,7 @@ MonoBehaviour:
   flameMat: {fileID: 2100000, guid: 8ff3f9622c8b36741b7ff712580e7484, type: 2}
   brokenFloor: {fileID: 2381766125686408372, guid: 89a1bffbccfad4b4bbe40199883961c0, type: 3}
   wrongSlideEffect: {fileID: 4099383157199073047, guid: e138985d07fc4d6469f80abd3f3381bc, type: 3}
---- !u!95 &6711092024995089015
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6711092024995089002}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  inactive: 0
 --- !u!1 &8169961750800672045
 GameObject:
   m_ObjectHideFlags: 0
