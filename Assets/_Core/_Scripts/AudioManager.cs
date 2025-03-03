@@ -4,21 +4,19 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] AudioSource audioSource;
 
-    [SerializeField] AudioClip gameOver;
-    [SerializeField] AudioClip success;
-    [SerializeField] AudioClip Notification;
+    [SerializeField] private AudioClip scorePointAudio, losePointAudio, matchPointAudio;
     
-    public void PlayGameOver()
+    public void PlayScorePoint()
     {
-        audioSource.PlayOneShot(gameOver);
+        audioSource.PlayOneShot(scorePointAudio);
     }
-    public void PlaySuccess()
+    public void PlayLosePoint()
     {
-        audioSource.PlayOneShot(success);
+        audioSource.PlayOneShot(losePointAudio);
     }
-    public void PlayNotification()
+    public void PlayMatchPoint()
     {
-        audioSource.PlayOneShot(Notification);
+        audioSource.PlayOneShot(matchPointAudio);
     }
     
 }

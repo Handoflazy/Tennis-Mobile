@@ -65,6 +65,7 @@ public class Ball : MonoBehaviour
     private void Out() {
         Instantiate(wrongSlideEffect,transform.position - Vector3.up*offset,wrongSlideEffect.transform.rotation);
         gameManager.Out();
+        Destroy(gameObject);
     }
 
     void Grown() => transform.DOScale(0.7F, 0.2F);

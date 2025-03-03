@@ -165,10 +165,12 @@ namespace _Core._Scripts
                     yield return new WaitForSeconds(0.15f);
                 }
                 playerPointsLabel.rectTransform.DOScaleY(1.2f, 0.25f).SetEase(Ease.OutBack).OnComplete(() => playerPointsLabel.rectTransform.DOScaleY(1f, 0.25f));
+                audioManager.PlayScorePoint();
             }
             else
             {
                 opponentPointsLabel.rectTransform.DOScaleY(1.2f, 0.25f).SetEase(Ease.OutBack).OnComplete(() => playerPointsLabel.rectTransform.DOScaleY(1f, 0.25f));
+                audioManager.PlayLosePoint();
             }
             yield return new WaitForSeconds(1f/6f);
             opponentPointsLabel.text = "" + opponentPoints;
@@ -190,7 +192,7 @@ namespace _Core._Scripts
                     .OnComplete(() => matchPoint.transform.DOScaleY(0, 0.8f).SetEase(Ease.InBack))
                     .WaitForCompletion();
                 matchPoint.gameObject.SetActive(false);
-                audioManager.PlaySuccess();
+                audioManager.PlayMatchPoint();
                 
                 //yield return new WaitForSeconds(0.5f);
             }
@@ -211,7 +213,6 @@ namespace _Core._Scripts
             else{
                 player.SetBar(true);
             }
-            Destroy(ballScript.gameObject);
             resetting = false;
         }
         public IEnumerator Done(bool wonMatch){
@@ -261,7 +262,7 @@ namespace _Core._Scripts
 
         public void AddBonus() {
             bonusDiamonds++;
-            audioManager.PlaySuccess();
+            audioManager.PlayMatchPoint();
             
             if(!diamondsLabel.gameObject.activeSelf)
                 diamondsLabel.gameObject.SetActive(true);
