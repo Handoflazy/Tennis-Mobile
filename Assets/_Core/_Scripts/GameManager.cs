@@ -37,7 +37,7 @@ namespace _Core._Scripts
         [SerializeField] private Transform opponentSpawnPos;
         [SerializeField] private Animator countDown;
         [SerializeField] private Transform scoreCamTarget;
-        
+        [SerializeField] PowerUpBallSpawner powerUpBallSpawner;
         [SerializeField] private GameObject[] confetti;
         [SerializeField] TextMeshProUGUI playerPointsLabel;
         [SerializeField] TextMeshProUGUI opponentPointsLabel;
@@ -97,7 +97,7 @@ namespace _Core._Scripts
             }
 
         }
-        private void SetAudio(bool change) {
+        public void SetAudio(bool change) {
             int audio = PlayerPrefs.GetInt("Audio");
             if(change){
                 audio = audio == 0 ? 1 : 0;
@@ -140,7 +140,7 @@ namespace _Core._Scripts
             if(!resetting)
                 StartCoroutine(CheckAndReset(false));
         }
-
+        
         IEnumerator CheckAndReset(bool wonPoint) {
             resetting = true;
             if(bonus){
@@ -175,6 +175,8 @@ namespace _Core._Scripts
             yield return new WaitForSeconds(1f/6f);
             opponentPointsLabel.text = "" + opponentPoints;
             playerPointsLabel.text = "" + playerPoints;
+            
+            powerUpBallSpawner.RandomSpawn();
             
             yield return new WaitForSeconds(0.25f);
             if(playerPoints >= pointsToWin){

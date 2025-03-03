@@ -2384,7 +2384,7 @@ MonoBehaviour:
   opponentSpawnPos: {fileID: 274689636}
   countDown: {fileID: 1357911874}
   scoreCamTarget: {fileID: 451013518}
-  powerUpBallSpawner: {fileID: 451777843}
+  powerUpBallSpawner: {fileID: 0}
   confetti:
   - {fileID: 260068276}
   - {fileID: 1012597498}
@@ -2527,7 +2527,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 451777842}
-  - component: {fileID: 451777843}
   m_Layer: 0
   m_Name: Ball Powerup Spawner
   m_TagString: Untagged
@@ -2543,28 +2542,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 451777841}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.34, z: 3.7}
+  m_LocalPosition: {x: 766.44904, y: 1025.1545, z: 1.2385921}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &451777843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 451777841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc7e26f4d0b44f2a8920a7d90db103ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  powerUpPrefab: {fileID: 5854309925308411818, guid: 86a6a161d94bfec49bf4a074c8125fe0, type: 3}
-  range: 3
-  chance: 4
 --- !u!1 &454574539
 GameObject:
   m_ObjectHideFlags: 0
