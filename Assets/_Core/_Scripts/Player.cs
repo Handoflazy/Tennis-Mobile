@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     [SerializeField]  Image indicatorFill;
     [SerializeField]  Opponent opponent;
     [SerializeField]  Transform ballPosition;
+    [SerializeField] private GameObject diamond;
     [HideInInspector]
     public GameObject scoreTexts;
     int moveRange;
@@ -62,9 +63,12 @@ public class Player : MonoBehaviour
     private GameManager gameManager;
     private float delta;
     private string currentAnimState;
+    [SerializeField] private GameObject racket;
+    [SerializeField] private GameObject brokenRacket;
 
     private void Start()
     {
+        diamond.SetActive(false);
         ServiceLocator.ForSceneOf(this).Get(out gameManager);
         uiManager.HideGamePanel();
         rangeCircle.SetBool(AnimConst.ShowParam, false);
@@ -127,8 +131,10 @@ public class Player : MonoBehaviour
             rotation = right ? -90 : 91;
             if (!moveParticles.isPlaying) moveParticles.Play();
         }
-        if(!anim.IsAnimationPlaying(AnimConst.ServeState)&&anim.GetCurrentAnimatorStateInfo(0).normalizedTime>0.6f)
-            anim.PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.RunLeftState) : AnimConst.IdleState);
+
+        if(!anim.IsAnimationPlaying(AnimConst.HitRightState)&&!anim.IsAnimationPlaying(AnimConst.ServeState)&&!anim.IsAnimationPlaying(AnimConst.PowerServeState)) {
+            anim.PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.RunLeftState) : AnimConst.IdleState, K_crossFade);
+        }
         if (Math.Abs(rotation - transform.eulerAngles.y) >= 5) {
             Vector3 rot = transform.eulerAngles.With(y: rotation);
             transform.DORotate(rot, 10).SetEase(Ease.InSine);
@@ -213,6 +219,12 @@ public class Player : MonoBehaviour
             cameraMovement.Zoom(false);
             showBar = false;
         }
+        int max = 2 + PlayerPrefs.GetInt("Bonus max");
+        if(gameManager.bonus && gameManager.bonusDiamonds >= max){
+            racket.gameObject.SetActive(false);
+            brokenRacket.gameObject.SetActive(true);
+        }
+        
         if(!cameraMovement.enabled){
             cameraMovement.enabled = true;
             uiManager.HideStartPanel();
@@ -258,7 +270,24 @@ public class Player : MonoBehaviour
         float barForce = data.Force * 0.8f + (data.Force * lastFillAmount * 0.3f);
         ball.Velocity = direction * barForce + Vector3.up * data.UpForce;
         encouragingTexts.ShowText(lastFillAmount);
+        
+        if(lastFillAmount > 0.95f && !gameManager.bonus) {
+            PlayDiamondEffect();
+            PlayerPrefs.SetInt("Diamonds", PlayerPrefs.GetInt("Diamonds") + 1);
+        }
+        
+        soundPlayer.PlayHitBallSound();
+        ball.SetKinematic(false);
+        StartCoroutine(cameraMovement.Shake(0.12f, 0.5f));
     }
+    [Button("Play Diamond Effect")]
+    private void PlayDiamondEffect() {
+        diamond.SetActive(true);
+        diamond.transform.DOScale(1.2f, 0.2f)
+            .OnComplete(() => diamond.transform.DOScale(0.1f, 0.5f));
+        diamond.transform.DOLocalMoveY(0.43f, 0.1f).OnComplete(() => diamond.transform.DOLocalMoveY(1.6f, 0.3f));
+    }
+
     IEnumerator DisableShooting(){
         shoot = false;
         yield return new WaitForSeconds(.7f);

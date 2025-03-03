@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class CourtTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
     GameManager gameManager;
     [SerializeField] bool net;
     void Start() {

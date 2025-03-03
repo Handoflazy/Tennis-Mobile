@@ -29,7 +29,6 @@ public class Ball : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
-        Debug.Log(other.gameObject.name);
         if(!other.gameObject.CompareTag("Ground"))
             return;
         if(flames.activeSelf) {

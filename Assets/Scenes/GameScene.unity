@@ -2344,6 +2344,7 @@ MonoBehaviour:
   pausePanel: {fileID: 1813069780}
   characterAvailableIcon: {fileID: 702275499}
   maxBonusTargets: 0
+  ballScript: {fileID: 0}
 --- !u!1 &451397535
 GameObject:
   m_ObjectHideFlags: 0
@@ -5805,6 +5806,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 8fd607221b7a0534783149f7404d0bf2, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 10183d0019bbd524192762ce2347c4f9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fd607221b7a0534783149f7404d0bf2, type: 3}
 --- !u!4 &985499179 stripped
@@ -8965,6 +8970,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1598516895}
+  - component: {fileID: 1598516896}
   m_Layer: 0
   m_Name: Seat Pivot
   m_TagString: Untagged
@@ -8988,6 +8994,18 @@ Transform:
   m_Father: {fileID: 1091971027}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1598516896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598516894}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08e7e64fca1448c6b3a5a18309c3192b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!33 &1607450788
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -9653,6 +9671,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1679188546}
+  - component: {fileID: 1679188547}
   m_Layer: 0
   m_Name: Seat Pivot
   m_TagString: Untagged
@@ -9676,6 +9695,18 @@ Transform:
   m_Father: {fileID: 1610317958}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1679188547
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679188545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08e7e64fca1448c6b3a5a18309c3192b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1699921712
 GameObject:
   m_ObjectHideFlags: 0
@@ -16785,6 +16816,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 8fd607221b7a0534783149f7404d0bf2, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 10183d0019bbd524192762ce2347c4f9, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8fd607221b7a0534783149f7404d0bf2, type: 3}
 --- !u!4 &2082322121 stripped

@@ -36,7 +36,6 @@ public class EncouragingText : MonoBehaviour
     void Show(TextState state){
         label.color = state.color;
         label.text = state.texts[Random.Range(0, state.texts.Length)];
-        
 		anim.Play(AnimConst.EncouragingTextPopup);
         
     }

@@ -5,10 +5,10 @@ namespace _Core._Scripts.Utilities.Extensions
 {
     public static class AnimatorExtension
     {
-        public static void PlayAnimation(this Animator animator, string animationStateName, int layerIndex = 0) {
+        public static void PlayAnimation(this Animator animator, string animationStateName,float crossFadeTime = 0, int layerIndex = 0) {
             PlayAnimation(animator, Animator.StringToHash(animationStateName), layerIndex);
         }
-        public static void PlayAnimation(this Animator animator, int animationStateHash, int layerIndex = 0) {
+        public static void PlayAnimation(this Animator animator, int animationStateHash,float crossFadeTime = 0, int layerIndex = 0) {
             if (animator == null) {
                 Debug.LogError("Animator is null");
                 return;
@@ -16,7 +16,11 @@ namespace _Core._Scripts.Utilities.Extensions
             if (IsAnimationPlaying(animator, animationStateHash, layerIndex)) {
                 return;
             }
-            animator.Play(animationStateHash);
+            if(crossFadeTime > 0) {
+                animator.CrossFade(animationStateHash, crossFadeTime, layerIndex);
+            } else {
+                animator.Play(animationStateHash, layerIndex);
+            }
         }
         public static bool IsAnimationPlaying(this Animator animator, string animationStateName, int layerIndex = 0) {
             return IsAnimationPlaying(animator, Animator.StringToHash(animationStateName), layerIndex);

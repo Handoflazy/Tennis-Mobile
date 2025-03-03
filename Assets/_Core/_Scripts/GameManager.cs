@@ -60,11 +60,13 @@ namespace _Core._Scripts
         int playerPoints;
         int opponentPoints;
 	
-        Ball ballScript;
+        public Ball ballScript;
 	
         bool resetting;
         bool playerServe;
-        
+        public bool bonus;
+        public int bonusDiamonds;
+
         private void Awake() {
             ServiceLocator.ForSceneOf(this).Register(this);
             canvas.SetActive(true);
