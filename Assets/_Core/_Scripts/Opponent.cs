@@ -119,7 +119,7 @@ public class Opponent : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other){
 		//shoot the ball on trigger enter (when ball enters the opponent box)
-		if(!other.gameObject.CompareTag("Ball") || other.gameObject.GetComponent<Ball>().inactive || justHit)
+		if(!other.gameObject.CompareTag("Ball") || ball.inactive || justHit)
 			return;
 		
 		float xDistance = Mathf.Abs(transform.position.x - other.gameObject.transform.position.x);

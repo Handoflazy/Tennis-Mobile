@@ -25,11 +25,11 @@ public class Ball : MonoBehaviour
 
     private void Start() {
         flames.SetActive(false);
-        ServiceLocator.ForSceneOf(this).Get<GameManager>(out gameManager);
+        ServiceLocator.ForSceneOf(this).Get(out gameManager);
     }
-    
 
     private void OnCollisionEnter(Collision other) {
+        Debug.Log(other.gameObject.name);
         if(!other.gameObject.CompareTag("Ground"))
             return;
         if(flames.activeSelf) {
@@ -62,6 +62,7 @@ public class Ball : MonoBehaviour
         get => rb.velocity;
         set => rb.velocity = value;
     }
+
     private void Out() {
         Instantiate(wrongSlideEffect,transform.position - Vector3.up*offset,wrongSlideEffect.transform.rotation);
         gameManager.Out();

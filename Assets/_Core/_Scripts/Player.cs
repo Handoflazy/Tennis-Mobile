@@ -72,7 +72,6 @@ public class Player : MonoBehaviour
 
         powerBarSpeed = Random.Range(data.PowerbarSpeedMin, data.PowerbarSpeedMax);
         dragTimer = new CountdownTimer(maxDragTime);
-        dragTimer.OnTimerStop += ResetShot;
     }
 
     private void Update()
@@ -92,7 +91,7 @@ public class Player : MonoBehaviour
 
     private void CheckBallRange()
     {
-        float zDistance = !ball ? 0 : Mathf.Abs(transform.position.z - ball.gameObject.transform.position.z);
+        float zDistance = !ball ? 0 :transform.position.z - ball.gameObject.transform.position.z;
         if (showBar || (zDistance < data.BallRange && !ball.inactive))
         {
             CanHitBall();
@@ -153,7 +152,8 @@ public class Player : MonoBehaviour
         }
         else if (Input.GetMouseButton(0) && canShoot)
         {
-            if (Vector3.Distance(startPos, currentPos) > dragDistance) Hit(currentPos);
+            if (dragTimer.IsFinished) ResetShot();
+            else if (Vector3.Distance(startPos, currentPos) > dragDistance) Hit(currentPos);
         }
         else if (Input.GetMouseButtonUp(0) && canShoot)
         {
@@ -257,7 +257,6 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.28f);
         float barForce = data.Force * 0.8f + (data.Force * lastFillAmount * 0.3f);
         ball.Velocity = direction * barForce + Vector3.up * data.UpForce;
-        Debug.Log(ball.Velocity);
         encouragingTexts.ShowText(lastFillAmount);
     }
     IEnumerator DisableShooting(){
