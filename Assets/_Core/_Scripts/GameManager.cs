@@ -4,7 +4,9 @@ using _Core._Scripts.Utilities.Extensions;
 using DG.Tweening;
 using Eflatun.SceneReference;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityServiceLocator;
 using Utilities.Extensions;
 using Random = UnityEngine.Random;
@@ -28,7 +30,6 @@ namespace _Core._Scripts
 //[SerializeField] private VisitorSpawner visitors;
         [SerializeField] private CameraMovement cameraMovement;
         public GameObject ballPrefab;
-
         private Player player;
         private Opponent opponent;
         
@@ -54,6 +55,13 @@ namespace _Core._Scripts
         public Animator pausePanel;
         public GameObject characterAvailableIcon;
         
+        [Header("Bonus scene only")]
+        public bool bonus;
+        public Animator bonuspopup;
+        public TextMeshProUGUI bonuspopupLabel;
+        public TextMeshProUGUI diamondsLabel;
+        public Animator diamondLabelAnim;
+	
         public int maxBonusTargets;
         bool useHapticFeedback;
 	
@@ -64,7 +72,6 @@ namespace _Core._Scripts
 	
         bool resetting;
         bool playerServe;
-        public bool bonus;
         public int bonusDiamonds;
 
         private void Awake() {
@@ -82,12 +89,12 @@ namespace _Core._Scripts
             player.SetBar(true);
             SetAudio(false);
             
-            /*if(bonus){
+            if(bonus){
                 diamondsLabel.gameObject.SetActive(false);
             }
             else{
                 characterAvailableIcon.SetActive(PlayerPrefs.GetInt("Diamonds") >= 20);
-            }*/
+            }
 
         }
         private void SetAudio(bool change) {
@@ -136,7 +143,10 @@ namespace _Core._Scripts
 
         IEnumerator CheckAndReset(bool wonPoint) {
             resetting = true;
-            //TODO: BONUS
+            if(bonus){
+                StartCoroutine(BonusDone());
+                yield break;
+            }
             player.Reset();
             opponent.Reset();
             
@@ -210,15 +220,15 @@ namespace _Core._Scripts
 		
             yield return new WaitForSeconds(1f/4f);
 			
-            GameObject matchInfo = new GameObject();
-            //MatchInfo info = matchInfo.AddComponent<MatchInfo>();
+            GameObject matchInfo = new ("MatchInfo", typeof(MatchInfo));
+            MatchInfo info = matchInfo.GetOrAdd<MatchInfo>();
 		
-            //info.won = wonMatch;
-            //info.scoreText = playerPoints + " - " + opponentPoints;
+            info.won = wonMatch;
+            info.scoreText = playerPoints + " - " + opponentPoints;
 		
             DontDestroyOnLoad(matchInfo);
-		
-            //SceneManager.LoadScene(winScene);
+
+            SceneManager.LoadScene(winScene.Path);
         }
         // ReSharper disable Unity.PerformanceAnalysis
         IEnumerator OpponentServe(){
@@ -250,7 +260,31 @@ namespace _Core._Scripts
         }
 
         public void AddBonus() {
-            throw new NotImplementedException();
+            bonusDiamonds++;
+            audioManager.PlaySuccess();
+            
+            if(!diamondsLabel.gameObject.activeSelf)
+                diamondsLabel.gameObject.SetActive(true);
+            int max = 3 + PlayerPrefs.GetInt("Bonus max");
+            
+            if(bonusDiamonds >= max){
+                resetting = true;
+                diamondsLabel.gameObject.SetActive(false);
+                
+                StartCoroutine(BonusDone());
+            }
+        }
+
+        IEnumerator BonusDone() {
+            PlayerPrefs.SetInt("Diamonds", PlayerPrefs.GetInt("Diamonds") + bonusDiamonds);
+            bonuspopupLabel.text = "+" + bonusDiamonds;
+            if(PlayerPrefs.GetInt("Bonus max") < maxBonusTargets - 3)
+                PlayerPrefs.SetInt("Bonus max", PlayerPrefs.GetInt("Bonus max") + 1);
+            bonuspopup.SetTrigger("Play");
+            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f/4f);
+		
+            SceneManager.LoadScene(0);
         }
 
         public void SetPlayer(Player player) {
@@ -274,6 +308,19 @@ namespace _Core._Scripts
             else{
                 Time.timeScale = 1;
             }
+        }
+        public void SetHaptic(bool change){
+            int haptic = PlayerPrefs.GetInt("Haptic");
+		
+            if(change){
+                haptic = haptic == 0 ? 1 : 0;
+			
+                PlayerPrefs.SetInt("Haptic", haptic);
+            }
+		
+            vibrateLine.SetActive(haptic == 1);
+		
+            useHapticFeedback = haptic == 0;
         }
     }
 }
