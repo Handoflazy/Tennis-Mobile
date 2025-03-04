@@ -23,3 +23,6 @@ MonoBehaviour:
   powerbarSpeedMax: 4.5
   powerbarMaxSlowdown: 15
   ballMoveSpeed: 10
+  maxDragTime: 1.7
+  dragDistance: 40
+  swipeSensitivity: 0.08

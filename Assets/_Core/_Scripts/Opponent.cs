@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using _Core._Scripts;
@@ -6,6 +7,7 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityServiceLocator;
 using Utilities.Extensions;
+using Random = UnityEngine.Random;
 
 public class Opponent : MonoBehaviour {
 	
@@ -15,7 +17,7 @@ public class Opponent : MonoBehaviour {
 	public Transform head;
 	public Transform lookAt;
 	public ParticleSystem moveParticles;
-	public Ball ball;
+	public BallVariable ball;
 	public Animator arrow;
 
 	public float force;
@@ -42,14 +44,15 @@ public class Opponent : MonoBehaviour {
 	
 	float rotation;
 
-	private GameManager gameManager;
-	
-    void Start(){
-	    ServiceLocator.ForSceneOf(this).Get(out gameManager);
+	private void Awake() {
+	    ServiceLocator.ForSceneOf(this).Register(this);
+	}
+
+	void Start() {
+	    ServiceLocator.ForSceneOf(this).Get(out player);
 		moveParticles.Stop();
 		serveStart = servePoint.position;
     }
-
     void Update(){
 		//check if character should move
 		Move();
@@ -79,8 +82,8 @@ public class Opponent : MonoBehaviour {
 			}
 			else{
 				Vector3 pos = transform.position;
-				bool move = ball.GetLastHit();
-				Vector3 ballTarget = move ? new Vector3(ball.gameObject.transform.position.x, pos.y, pos.z) : pos;
+				bool move = ball.Value.GetLastHit();
+				Vector3 ballTarget = move ? new Vector3(ball.Value.gameObject.transform.position.x, pos.y, pos.z) : pos;
 				transform.position = Vector3.MoveTowards(transform.position, ballTarget, Time.deltaTime * speed);
 			}
 
@@ -119,7 +122,7 @@ public class Opponent : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other){
 		//shoot the ball on trigger enter (when ball enters the opponent box)
-		if(!other.gameObject.CompareTag("Ball") || ball.inactive || justHit)
+		if(!other.gameObject.CompareTag("Ball") || ball.Value.inactive || justHit)
 			return;
 		
 		float xDistance = Mathf.Abs(transform.position.x - other.gameObject.transform.position.x);
@@ -143,18 +146,18 @@ public class Opponent : MonoBehaviour {
 		Vector3 random = new Vector3(Random.Range(-moveRange, moveRange), 0, player.gameObject.transform.position.z);
 		
 		
-		if(ball.IsFlame() && !noFlame)
+		if(ball.Value.IsFlame() && !noFlame)
 			return;
 			
-		ball.SetLastHit(false);
+		ball.Value.SetLastHit(false);
 		
 		Vector3 direction = (random - transform.position).normalized;
 		
 		player.SetTargetPosition(random);
 		
-		ball.transform.position = spawnPosition == null ? servePoint.position : spawnPosition.position;
+		ball.Value.transform.position = spawnPosition == null ? servePoint.position : spawnPosition.position;
 		
-		ball.Velocity = direction * force + Vector3.up * upForce;
+		ball.Value.Velocity = direction * force + Vector3.up * upForce;
 	}
 	
 	//make sure we don't hit twice at the same time

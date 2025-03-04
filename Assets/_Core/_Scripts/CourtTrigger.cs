@@ -1,19 +1,18 @@
 using _Core._Scripts;
+using Obvious.Soap;
 using UnityEngine;
 
 public class CourtTrigger : MonoBehaviour
 {
-    GameManager gameManager;
+    [SerializeField] ScriptableEventBool courtTriggered;
     [SerializeField] bool net;
-    void Start() {
-        gameManager = FindObjectOfType<GameManager>();
-    }
-
     private void OnTriggerEnter(Collider other) {
         if(!other.gameObject.CompareTag("Ball"))
             return;
         Ball ball = other.gameObject.GetComponent<Ball>();
-        if(!ball.inactive)
-            gameManager.CourtTriggered(net);
+        if(!ball.inactive) {
+            courtTriggered.Raise(net);
+            ball.inactive = true;
+        }
     }
 }

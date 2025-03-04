@@ -6800,6 +6800,7 @@ GameObject:
   - component: {fileID: 8931480073554942289}
   - component: {fileID: 5451495774838743568}
   - component: {fileID: 8742717213501565554}
+  - component: {fileID: 1535826033}
   m_Layer: 0
   m_Name: Opponent
   m_TagString: Untagged
@@ -6867,7 +6868,7 @@ MonoBehaviour:
   head: {fileID: 8931480073554942306}
   lookAt: {fileID: 0}
   moveParticles: {fileID: 6214822905242796293}
-  ball: {fileID: 0}
+  ball: {fileID: 11400000, guid: 955e821bd59249d4bb51d6c0e337b713, type: 2}
   arrow: {fileID: 3699837309891899652}
   force: 9.7
   upForce: 8.5
@@ -6906,6 +6907,38 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.5, y: 2.4, z: 1.1}
   m_Center: {x: 0, y: 1.2, z: 0}
+--- !u!114 &1535826033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8931480073555363190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43f91a7ff6f55e448b69d6d2121dcc06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _binding: 0
+  _disableAfterSubscribing: 0
+  _eventResponses:
+  - Delay: 0
+    _scriptableEvent: {fileID: 11400000, guid: 3e224deea3c9a9343bff77f7bd364b12, type: 2}
+    _response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8931480073554942289}
+          m_TargetAssemblyTypeName: Opponent, Assembly-CSharp
+          m_MethodName: SetTarget
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &8931480073555363192
 GameObject:
   m_ObjectHideFlags: 0

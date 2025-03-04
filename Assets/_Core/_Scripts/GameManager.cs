@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
+using System.Threading.Tasks;
 using _Core._Scripts.Utilities.Extensions;
 using DG.Tweening;
 using Eflatun.SceneReference;
+using Obvious.Soap;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityServiceLocator;
@@ -32,12 +33,16 @@ namespace _Core._Scripts
         public GameObject ballPrefab;
         private Player player;
         private Opponent opponent;
+        [SerializeField]
+        UIManager uiManager;
         
         [SerializeField] private Transform spawnPos;
         [SerializeField] private Transform opponentSpawnPos;
         [SerializeField] private Animator countDown;
         [SerializeField] private Transform scoreCamTarget;
-        [SerializeField] PowerUpBallSpawner powerUpBallSpawner;
+        [SerializeField] private ScriptableEventNoParam spawnPowerUp;
+        [SerializeField] private BallVariable ballVariable;
+        
         [SerializeField] private GameObject[] confetti;
         [SerializeField] TextMeshProUGUI playerPointsLabel;
         [SerializeField] TextMeshProUGUI opponentPointsLabel;
@@ -68,11 +73,12 @@ namespace _Core._Scripts
         int playerPoints;
         int opponentPoints;
 	
-        public Ball ballScript;
 	
         bool resetting;
         bool playerServe;
         public int bonusDiamonds;
+        [SerializeField] private GameObject scoreTexts;
+        [SerializeField] private GameObject matchLabel;
 
         private void Awake() {
             ServiceLocator.ForSceneOf(this).Register(this);
@@ -81,12 +87,13 @@ namespace _Core._Scripts
         }
 
         private void Start() {
+            uiManager.HideGamePanel();
             matchPoint.gameObject.SetActive(false);
             foreach(GameObject conf in confetti){
                 conf.SetActive(false);
             }
+            
             SetColorScheme();
-            player.SetBar(true);
             SetAudio(false);
             
             if(bonus){
@@ -97,6 +104,29 @@ namespace _Core._Scripts
             }
 
         }
+
+        public async void SetUpGamePlay() {
+            ServiceLocator.ForSceneOf(this).Get(out player);
+            ServiceLocator.ForSceneOf(this).Get(out opponent);
+            
+            playerPoints = 0;
+            opponentPoints = 0;
+            playerPointsLabel.text = "0";
+            opponentPointsLabel.text = "0";
+            playerServe = true;
+            await Task.Yield();
+            player.SetServe(true);
+        }
+        public void StartGame() {
+            uiManager.HideStartPanel();
+            uiManager.ShowGamePanel();
+            if(scoreTexts != null){
+                scoreTexts.SetActive(true);
+                matchLabel.SetActive(false);
+            }
+        }
+        
+        
         public void SetAudio(bool change) {
             int audio = PlayerPrefs.GetInt("Audio");
             if(change){
@@ -109,17 +139,12 @@ namespace _Core._Scripts
         }
 
         public void Serve() {
-            ballScript = Instantiate(ballPrefab, spawnPos.position, ballPrefab.transform.rotation).GetComponent<Ball>();
-            player.ball = ballScript;
-            opponent.ball = ballScript;
+            ballVariable.Value = Instantiate(ballPrefab, spawnPos.position, ballPrefab.transform.rotation)
+                .GetComponent<Ball>();
         }
 
         public void CourtTriggered(bool net) {
-            if (net) {
-                HandlePoint(ballScript.GetLastHit(), false);
-            } else {
-                HandlePoint(ballScript.GetLastHit(), true);
-            }
+            HandlePoint(ballVariable.Value.GetLastHit(), !net);
         }
         private void HandlePoint(bool lastHit, bool winIfLastHit) {
             if (lastHit == winIfLastHit) {
@@ -150,8 +175,6 @@ namespace _Core._Scripts
             player.Reset();
             opponent.Reset();
             
-            if(ballScript && !ballScript.inactive)
-                ballScript.inactive = true;
             yield return new WaitForSeconds(0.75f);
             cameraMovement.SwitchTargetTemp(scoreCamTarget, 1.5f, 0.5f);
             
@@ -176,7 +199,7 @@ namespace _Core._Scripts
             opponentPointsLabel.text = "" + opponentPoints;
             playerPointsLabel.text = "" + playerPoints;
             
-            powerUpBallSpawner.RandomSpawn();
+            spawnPowerUp.Raise();
             
             yield return new WaitForSeconds(0.25f);
             if(playerPoints >= pointsToWin){
@@ -204,7 +227,7 @@ namespace _Core._Scripts
             }
             if(!playerServeOnly){
                 if(playerServe){
-                    player.SetBar(true);
+                    player.SetServe(true);
                 }
                 else{
                     StartCoroutine(OpponentServe());
@@ -213,7 +236,7 @@ namespace _Core._Scripts
                 playerServe = !playerServe;
             }
             else{
-                player.SetBar(true);
+                player.SetServe(true);
             }
             resetting = false;
         }
@@ -289,14 +312,6 @@ namespace _Core._Scripts
 		
             SceneManager.LoadScene(0);
         }
-
-        public void SetPlayer(Player player) {
-            this.player = player;
-        }
-        public void SetOpponent(Opponent opponent) {
-            this.opponent = opponent;
-        }
-
         public void Pause() {
             pausePanel.gameObject.SetActive(!pausePanel.gameObject.activeSelf);
             pausePanel.Play("Pause panel fade in");

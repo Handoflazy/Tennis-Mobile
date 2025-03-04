@@ -1,13 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityUtils;
 
 public class FingerTrail: MonoBehaviour
 {
-    public Transform[] sprites;
-
+    [SerializeField] Transform[] sprites;
+    
     private int index;
     
+
     void Start()
     {
         Disable();

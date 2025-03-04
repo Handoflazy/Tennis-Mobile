@@ -1,0 +1,1 @@
+﻿Assets/Plugins/Obvious/Soap/Examples/Scenes/1_ScriptableVariables_Example_Scene.unity

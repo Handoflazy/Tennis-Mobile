@@ -16,7 +16,7 @@ public class Ball : MonoBehaviour
     [SerializeField] private Material flameMat;
     [SerializeField] private GameObject brokenFloor;
     [SerializeField] private GameObject wrongSlideEffect;
-    [HideInInspector]
+    
     public bool inactive;
     private bool playerHit;
     private GameManager gameManager;

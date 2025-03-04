@@ -4,6 +4,7 @@ using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityServiceLocator;
 
 public class UIManager : MonoBehaviour
 {
@@ -18,11 +19,14 @@ public class UIManager : MonoBehaviour
     [SerializeField, Required] private Animator SwipeLabel;
     [FoldoutGroup("Game Panel")]
     [SerializeField, Required] private Animator CountdownServe;
-    
+
+    private void Awake() {
+        ServiceLocator.ForSceneOf(this).Register(this);
+    }
 
     private void Start() {
-        
         availableIcon.transform.DOScale(1.5f,0.4f).SetLoops(-1,LoopType.Yoyo);
+        
     }
 
     public void HideStartPanel() {

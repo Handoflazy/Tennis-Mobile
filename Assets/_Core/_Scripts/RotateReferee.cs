@@ -6,24 +6,15 @@ using Utilities.Extensions;
 
 public class RotateReferee : MonoBehaviour
 {
-    GameManager gameManager;
-    private Transform ball;
-    private void Start() {
-        ServiceLocator.ForSceneOf(this).Get(out gameManager);
-    }
+    [SerializeField] BallVariable ball;
 
     void Update() {
-        if(ball == null && gameManager.ballScript != null) {
-            {
-                ball = gameManager.ballScript.transform;
-            }
-        }
         LookAtBall();
     }
 
     void LookAtBall() {
-        if(ball == null)
+        if(ball.Value == null)
             return;
-        transform.LookAt(ball.transform.position.With(y: transform.position.y));
+        transform.LookAt(ball.Value.transform.position.With(y: transform.position.y));
     }
 }

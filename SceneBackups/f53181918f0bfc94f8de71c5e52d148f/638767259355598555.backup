@@ -2319,8 +2319,7 @@ MonoBehaviour:
   opponentSpawnPos: {fileID: 274689636}
   countDown: {fileID: 1357911874}
   scoreCamTarget: {fileID: 451013518}
-  spawnPowerUp: {fileID: 11400000, guid: 11d365cafe44b964eaaa2f0c26973d18, type: 2}
-  ballVariable: {fileID: 11400000, guid: 955e821bd59249d4bb51d6c0e337b713, type: 2}
+  powerUpBallSpawner: {fileID: 451777843}
   confetti:
   - {fileID: 260068276}
   - {fileID: 1012597498}
@@ -2355,6 +2354,7 @@ MonoBehaviour:
   diamondsLabel: {fileID: 0}
   diamondLabelAnim: {fileID: 0}
   maxBonusTargets: 0
+  ballVariable: {fileID: 11400000, guid: 955e821bd59249d4bb51d6c0e337b713, type: 2}
   bonusDiamonds: 0
   scoreTexts: {fileID: 2102935}
   matchLabel: {fileID: 924011667}

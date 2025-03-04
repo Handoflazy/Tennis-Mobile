@@ -16,7 +16,7 @@ namespace Utilities.Extensions
         /// </summary>
         public static Vector3 Add(this Vector3 vector, float? x = null, float? y = null, float? z = null)
         {
-            return new Vector3(vector.x + x??0, vector.y +y??0, vector.z + z??0);
+            return new Vector3(vector.x + (x ?? 0), vector.y + (y ?? 0), vector.z + (z ?? 0));
         }
         /// <summary>
         /// Returns a Boolean indicating whether the current Vector3 is in a given range from another Vector3

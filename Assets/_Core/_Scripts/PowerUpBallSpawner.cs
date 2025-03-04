@@ -5,10 +5,9 @@ public class PowerUpBallSpawner : MonoBehaviour
     public PowerUpBall powerUpPrefab;
     public float range;
     public int chance;
-    GameObject ball;
         
     public void RandomSpawn(){
-        if(Random.Range(0, chance) != 0 || ball != null)
+        if(Random.Range(0, chance) != 0)
             return;
 		    
         Vector3 position = transform.position + Vector3.right * Random.Range(-range, range);
