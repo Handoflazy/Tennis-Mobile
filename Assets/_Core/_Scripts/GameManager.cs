@@ -27,6 +27,7 @@ namespace _Core._Scripts
         [SerializeField] private ScoreUIManager scoreUI;
         [SerializeField] private UIManager uiManager;
         [SerializeField] private BallFactory factory;
+        [SerializeField] private MatchInfo matchInfo;
     
         [Header("SOAP")]
         [SerializeField] private PlayerVariable player;
@@ -215,14 +216,8 @@ namespace _Core._Scripts
             CameraZoom.Raise();
 
             yield return new WaitForSeconds(0.25f);
-
-            GameObject matchInfo = new("MatchInfo");
-            MatchInfo info = matchInfo.GetOrAdd<MatchInfo>();
-
-            info.won = wonMatch;
-            info.scoreText = playerPoints + " - " + opponentPoints;
-
-            DontDestroyOnLoad(matchInfo);
+            
+            matchInfo.SetMatchInfo(wonMatch,playerPoints + " - " + opponentPoints);
             yield return new WaitForSeconds(2f);
 
             SceneManager.LoadScene(winScene.Path);

@@ -1,10 +1,30 @@
-﻿
-    using System;
-    using Unity.VisualScripting;
-    using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-    public class MatchInfo:MonoBehaviour
+
+    [CreateAssetMenu(menuName = "GamePlay/MatchInfo", fileName = "MatchInfo")]
+    public class MatchInfo: ScriptableObject
     {
-        public bool won;
-        public string scoreText;
+        private bool won;
+        private string scoreText;
+        
+        public bool Won => won;
+        public string ScoreText => scoreText;
+
+        private void OnEnable() {
+            won = PlayerPrefs.GetInt("MatchWon", 0) == 1;
+            scoreText = PlayerPrefs.GetString("MatchScoreText", "");
+        }
+        public void SetMatchInfo(bool won, string scoreText)
+        {
+            this.won = won;
+            this.scoreText = scoreText;
+            PlayerPrefs.SetInt("MatchWon", won ? 1 : 0);
+            PlayerPrefs.SetString("MatchScoreText", scoreText);
+        }
+
+        public void Reset()
+        {
+           SetMatchInfo(false, "");
+        }
     }
