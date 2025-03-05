@@ -3,24 +3,25 @@ using System.Collections;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ScoreUIManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI matchLabel;
     [SerializeField] private TextMeshProUGUI playerScore;
     [SerializeField] private TextMeshProUGUI opponentScore;
-    [SerializeField] private GameObject ScorePanel;
+    [SerializeField] private GameObject scorePanel;
     
     
 
     public void ShowMatchLabel(string text) {
         matchLabel.text = text;
         matchLabel.rectTransform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
-        ScorePanel.SetActive(false);
+        scorePanel.SetActive(false);
     }
-    public void HideMatchLabel() {
-        matchLabel.rectTransform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack);
-        ScorePanel.SetActive(true);
+    public async void HideMatchLabel() {
+        await matchLabel.rectTransform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).AsyncWaitForCompletion();
+        scorePanel.SetActive(true);
     }
     
     public IEnumerator UpdatePlayerScore(int score) {

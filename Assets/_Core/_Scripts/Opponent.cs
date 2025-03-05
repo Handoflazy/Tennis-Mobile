@@ -32,7 +32,7 @@ public class Opponent : MonoBehaviour
     private float lastDist;
     private float rotation;
 
-    private const float MoveThreshold = 0.1f;
+    private const float MoveThreshold = 0.05f;
     private const float HitWaitTime = 1f;
     private const float MaxXDistance = 1.3f;
     private const float RotationRight = 91f;
@@ -61,7 +61,7 @@ public class Opponent : MonoBehaviour
 
         float dist = Vector3.Distance(transform.position, target);
         moving = dist > MoveThreshold;
-
+        
         if (moving)
         {
             MoveTowardsTarget();

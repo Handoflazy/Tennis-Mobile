@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityServiceLocator;
+using Utilities.ImprovedTimers;
 
 public class GameEffectManager : MonoBehaviour
 {
@@ -14,6 +16,8 @@ public class GameEffectManager : MonoBehaviour
     private GameObject brokenFloor;
     private GameObject wrongSlide;
     private GameObject ballEffect;
+
+    private CountdownTimer timer;
     
     private void Awake() {
         brokenFloor = Instantiate(brokenFloorPrefab, Vector3.zero, brokenFloorPrefab.transform.rotation, transform);
@@ -28,9 +32,22 @@ public class GameEffectManager : MonoBehaviour
         {
             conf.SetActive(false);
         }
-        
+        timer = new CountdownTimer(5f);
+        timer.OnTimerStop += TurnOffConfetti;
         ServiceLocator.ForSceneOf(this).Register(this);
     }
+
+    private void OnDisable() {
+        timer.OnTimerStop -= TurnOffConfetti;
+    }
+
+    private void TurnOffConfetti() {
+        foreach (GameObject conf in confetti)
+        {
+            conf.SetActive(false);
+        }
+    }
+
 
     public IEnumerator PlayConfetti() {
         foreach (GameObject conf in confetti)
@@ -38,10 +55,7 @@ public class GameEffectManager : MonoBehaviour
             conf.SetActive(true);
             yield return new WaitForSeconds(0.15f);
         }
-        foreach (GameObject conf in confetti)
-        {
-            conf.SetActive(false);
-        }
+        timer.Start();
     }
     
     public async void BrokenFloor(Vector3 position) {

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
-using _Core._Scripts.Utilities.Extensions;
 using DG.Tweening;
 using Eflatun.SceneReference;
 using Obvious.Soap;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityServiceLocator;
 using Utilities.Extensions;
 using Random = UnityEngine.Random;
@@ -16,317 +14,284 @@ using Random = UnityEngine.Random;
 namespace _Core._Scripts
 {
     [Serializable]
-    public struct ColorScheme {
+    public struct ColorScheme
+    {
         public Color floor;
         public Color background;
         public Color court;
     }
+
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private SceneReference winScene;
         [SerializeField] private ScoreUIManager scoreUI;
-        [SerializeField] private bool playerServeOnly;
-        [SerializeField] private int pointsToWin = 3;
-        [SerializeField] private Animator transition;
-        [SerializeField] private Animator cameraZoom;
-        [SerializeField] private GameObject canvas;
-//[SerializeField] private VisitorSpawner visitors;
-        [SerializeField] private CameraMovement cameraMovement;
-        public GameObject ballPrefab;
-        [SerializeField] PlayerVariable player;
-        [SerializeField] OpponentVariable opponent;
-        [SerializeField]
-        UIManager uiManager;
-        
-        [SerializeField] private Transform spawnPos;
-        [SerializeField] private Transform opponentSpawnPos;
-        [SerializeField] private Animator countDown;
-        [SerializeField] private Transform scoreCamTarget;
+        [SerializeField] private UIManager uiManager;
+        [SerializeField] private BallFactory factory;
+    
+        [Header("SOAP")]
+        [SerializeField] private PlayerVariable player;
+        [SerializeField] private OpponentVariable opponent;
         [SerializeField] private ScriptableEventNoParam spawnPowerUp;
         [SerializeField] private BallVariable ballVariable;
-        
-        [SerializeField] private GameObject[] confetti;
-        [SerializeField] GameObject matchPoint;
-        
-        public ColorScheme[] colorSchemes;
-        public Material floor;
-        public Material stadium;
-        public Material court;
+        [SerializeField] private ScriptableEventNoParam CameraZoom;
 
-        [SerializeField] AudioManager audioManager;
+        [Header("Game Settings")]
+        [SerializeField] private bool playerServeOnly;
+        [SerializeField] private int pointsToWin = 3;
+        [SerializeField] private int maxBonusTargets;
 
-        public GameObject audioLine;
-        public GameObject vibrateLine;
-        public Animator pausePanel;
-        public GameObject characterAvailableIcon;
-        
+        [Space(15)]
+        [SerializeField] private Transform playerSpawnPos;
+        [SerializeField] private Transform opponentSpawnPos;
+        [SerializeField] private Transform scoreCamTarget;
+
+        [FoldoutGroup("Stadium"), SerializeField] private ColorScheme[] colorSchemes;
+        [FoldoutGroup("Stadium"), SerializeField] private Material floor;
+        [FoldoutGroup("Stadium"), SerializeField] private Material stadium;
+        [FoldoutGroup("Stadium"), SerializeField] private Material court;
+
         [Header("Bonus scene only")]
         public bool bonus;
         public Animator bonuspopup;
         public TextMeshProUGUI bonuspopupLabel;
         public TextMeshProUGUI diamondsLabel;
         public Animator diamondLabelAnim;
-	
-        public int maxBonusTargets;
-        bool useHapticFeedback;
-	
-        int playerPoints;
-        int opponentPoints;
-	
-	
-        bool resetting;
-        bool playerServe;
+
+        private CameraMovement cam;
+        private AudioManager audioManager;
+        public GameEffectManager gameEffectManager;
+        public VisitorSpawner visitors;
+
+        private int playerPoints;
+        private int opponentPoints;
+        private bool resetting;
+        private bool playerServe;
         public int bonusDiamonds;
-        [SerializeField] private GameObject scoreTexts;
 
-        private void Awake() {
+        private void Awake()
+        {
             ServiceLocator.ForSceneOf(this).Register(this);
-            canvas.SetActive(true);
-            pausePanel.gameObject.SetActive(false);
         }
 
-        private void Start() {
-            uiManager.HideGamePanel();
-            matchPoint.gameObject.SetActive(false);
-            foreach(GameObject conf in confetti){
-                conf.SetActive(false);
-            }
+        private void Start()
+        {
+            ServiceLocator.ForSceneOf(this).Get(out visitors);
+            ServiceLocator.ForSceneOf(this).Get(out cam);
+            ServiceLocator.ForSceneOf(this).Get(out audioManager);
+            uiManager.ToggleGamePanel(false);
             
+
             SetColorScheme();
-            SetAudio(false);
-            
-            if(bonus){
-                diamondsLabel.gameObject.SetActive(false);
-            }
-            else{
-                characterAvailableIcon.SetActive(PlayerPrefs.GetInt("Diamonds") >= 20);
-            }
-
+            uiManager.ToggleBonus(bonus);
         }
 
-        public void SetUpGamePlay() {
+        public void SetUpGamePlay()
+        {
             playerPoints = 0;
             opponentPoints = 0;
             StartCoroutine(scoreUI.UpdatePlayerScore(playerPoints));
             StartCoroutine(scoreUI.UpdateOpponentScore(opponentPoints));
+            scoreUI.ShowMatchLabel("Tournament match");
             playerServe = false;
             player.Value.SetServe(true);
         }
-        public void StartGame() {
+
+        public void StartGame()
+        {
             uiManager.HideStartPanel();
-            uiManager.ShowGamePanel();
+            uiManager.ToggleGamePanel(true);
             scoreUI.HideMatchLabel();
         }
-        
-        
-        public void SetAudio(bool change) {
-            int audio = PlayerPrefs.GetInt("Audio");
-            if(change){
-                audio = audio == 0 ? 1 : 0;
-			
-                PlayerPrefs.SetInt("Audio", audio);
-            }
-            audioLine.SetActive(audio == 1);
-            AudioListener.volume = audio == 0 ? 1 : 0;
+
+        public void Serve()
+        {
+            ballVariable.Value = factory.Create();
+            ballVariable.Value.transform.position = playerSpawnPos.position;
         }
 
-        public void Serve() {
-            ballVariable.Value = Instantiate(ballPrefab, spawnPos.position, ballPrefab.transform.rotation)
-                .GetComponent<Ball>();
+        public void CourtTriggered(bool net)
+        {
+            if(ballVariable.Value)
+                HandlePoint(ballVariable.Value.GetLastHit(), !net);
         }
 
-        public void CourtTriggered(bool net) {
-            HandlePoint(ballVariable.Value.GetLastHit(), !net);
-        }
-        private void HandlePoint(bool lastHit, bool winIfLastHit) {
-            if (lastHit == winIfLastHit) {
+        private void HandlePoint(bool lastHit, bool winIfLastHit)
+        {
+            if (lastHit == winIfLastHit)
+            {
                 WinPoint();
-            } else {
+            }
+            else
+            {
                 LosePoint();
             }
         }
 
-        private void WinPoint() {
+        private void WinPoint()
+        {
             playerPoints++;
-            if(!resetting)
+            if (!resetting)
                 StartCoroutine(CheckAndReset(true));
         }
 
-        private void LosePoint() {
+        private void LosePoint()
+        {
             opponentPoints++;
-            if(!resetting)
+            if (!resetting)
                 StartCoroutine(CheckAndReset(false));
         }
-        
-        IEnumerator CheckAndReset(bool wonPoint) {
+
+        private IEnumerator CheckAndReset(bool wonPoint)
+        {
             resetting = true;
-            if(bonus){
+            if (bonus)
+            {
                 StartCoroutine(BonusDone());
                 yield break;
             }
             player.Value.Reset();
             opponent.Value.Reset();
-            
+
             yield return new WaitForSeconds(0.75f);
-            cameraMovement.SwitchTargetTemp(scoreCamTarget, 1.5f, 0.5f);
-            
+            cam.SwitchTargetTemp(scoreCamTarget, 1.5f, 0.5f);
+
             yield return new WaitForSeconds(0.5f);
-            
-            if(wonPoint)
+
+            if (wonPoint)
             {
-                //visitors.Cheer();
-                foreach(GameObject conf in confetti){
-                    conf.SetActive(true);
-                    yield return new WaitForSeconds(0.15f);
-                }
+                visitors.Cheer();
+                if(!gameEffectManager) ServiceLocator.ForSceneOf(this).Get(out gameEffectManager);
+                yield return StartCoroutine(gameEffectManager.PlayConfetti());
                 yield return scoreUI.UpdatePlayerScore(playerPoints);
                 audioManager.PlayScorePoint();
             }
             else
             {
+                visitors.Disbelief();
                 yield return scoreUI.UpdateOpponentScore(opponentPoints);
                 audioManager.PlayLosePoint();
             }
             spawnPowerUp.Raise();
-            
+
             yield return new WaitForSeconds(0.25f);
-            if(playerPoints >= pointsToWin){
+            if (playerPoints >= pointsToWin)
+            {
                 StartCoroutine(Done(true));
             }
-            else if(opponentPoints >= pointsToWin){
+            else if (opponentPoints >= pointsToWin)
+            {
                 StartCoroutine(Done(false));
             }
-            else if(playerPoints == pointsToWin - 1 || opponentPoints == pointsToWin - 1){
+            else if (playerPoints == pointsToWin - 1 || opponentPoints == pointsToWin - 1)
+            {
                 yield return new WaitForSeconds(0.5f);
-			
-                matchPoint.gameObject.SetActive(true);
-                matchPoint.transform.localScale = Vector3.one.With(y: 0);
-                yield return matchPoint.transform.DOScaleY(1, 1f).SetEase(Ease.OutBack)
-                    .OnComplete(() => matchPoint.transform.DOScaleY(0, 0.8f).SetEase(Ease.InBack))
-                    .WaitForCompletion();
-                matchPoint.gameObject.SetActive(false);
+                yield return StartCoroutine(uiManager.ShowScoreMatch());
                 audioManager.PlayMatchPoint();
-                
-                //yield return new WaitForSeconds(0.5f);
             }
             yield return new WaitForSeconds(1f);
-            foreach(GameObject conf in confetti){
-                conf.SetActive(false);
-            }
-            if(!playerServeOnly){
-                if(playerServe){
+            if (!playerServeOnly)
+            {
+                if (playerServe)
+                {
                     player.Value.SetServe(true);
                 }
-                else{
+                else
+                {
                     StartCoroutine(OpponentServe());
                 }
-		
+
                 playerServe = !playerServe;
             }
-            else{
+            else
+            {
                 player.Value.SetServe(true);
             }
             resetting = false;
         }
-        public IEnumerator Done(bool wonMatch){
-            transition.SetTrigger(AnimConst.TransitionParam);
-            cameraZoom.SetTrigger(AnimConst.ZoomParam);
-		
-            yield return new WaitForSeconds(1f/4f);
-			
-            GameObject matchInfo = new ("MatchInfo", typeof(MatchInfo));
+
+        private IEnumerator Done(bool wonMatch)
+        {
+            uiManager.ShowTransition();
+            CameraZoom.Raise();
+
+            yield return new WaitForSeconds(0.25f);
+
+            GameObject matchInfo = new("MatchInfo");
             MatchInfo info = matchInfo.GetOrAdd<MatchInfo>();
-		
+
             info.won = wonMatch;
             info.scoreText = playerPoints + " - " + opponentPoints;
-		
+
             DontDestroyOnLoad(matchInfo);
+            yield return new WaitForSeconds(2f);
 
             SceneManager.LoadScene(winScene.Path);
         }
-        // ReSharper disable Unity.PerformanceAnalysis
-        IEnumerator OpponentServe(){
-            countDown.PlayAnimation("Countdown serve play");
-            yield return new WaitForSeconds(3f);
-		
+
+        private IEnumerator OpponentServe()
+        {
+            yield return StartCoroutine(uiManager.StartCountdown());
             StartCoroutine(opponent.Value.JustHit());
-		
             opponent.Value.PlayerServeAnimation();
-		
+
             yield return new WaitForSeconds(0.28f);
             Serve();
             opponent.Value.HitBall(true, opponentSpawnPos);
         }
-        void SetColorScheme() {
+
+        private void SetColorScheme()
+        {
             int random = Random.Range(0, colorSchemes.Length);
-		
+
             floor.color = colorSchemes[random].floor;
             stadium.color = colorSchemes[random].background;
             court.color = colorSchemes[random].court;
         }
-        public void FireBall() {
+
+        public void FireBall()
+        {
             WinPoint();
-            StartCoroutine(cameraMovement.Shake(0.2f, 1.2f));
+            StartCoroutine(cam.Shake(0.2f, 1.2f));
         }
 
-        public void Out() {
+        public void Out()
+        {
             LosePoint();
         }
 
-        public void AddBonus() {
+        public void AddBonus()
+        {
             bonusDiamonds++;
             audioManager.PlayMatchPoint();
-            
-            if(!diamondsLabel.gameObject.activeSelf)
+
+            if (!diamondsLabel.gameObject.activeSelf)
                 diamondsLabel.gameObject.SetActive(true);
             int max = 3 + PlayerPrefs.GetInt("Bonus max");
-            
-            if(bonusDiamonds >= max){
+
+            if (bonusDiamonds >= max)
+            {
                 resetting = true;
                 diamondsLabel.gameObject.SetActive(false);
-                
+
                 StartCoroutine(BonusDone());
             }
         }
 
-        IEnumerator BonusDone() {
+        private IEnumerator BonusDone()
+        {
             PlayerPrefs.SetInt("Diamonds", PlayerPrefs.GetInt("Diamonds") + bonusDiamonds);
             bonuspopupLabel.text = "+" + bonusDiamonds;
-            if(PlayerPrefs.GetInt("Bonus max") < maxBonusTargets - 3)
+            if (PlayerPrefs.GetInt("Bonus max") < maxBonusTargets - 3)
                 PlayerPrefs.SetInt("Bonus max", PlayerPrefs.GetInt("Bonus max") + 1);
             bonuspopup.SetTrigger("Play");
             yield return new WaitForSeconds(1f);
-            yield return new WaitForSeconds(1f/4f);
-		
+            yield return new WaitForSeconds(0.25f);
+
             SceneManager.LoadScene(0);
         }
-        public void Pause() {
-            pausePanel.gameObject.SetActive(!pausePanel.gameObject.activeSelf);
-            pausePanel.Play("Pause panel fade in");
-            StartCoroutine(Freeze(pausePanel.gameObject.activeSelf));
-        }
-        IEnumerator Freeze(bool freeze){
-            if(freeze){
-                yield return new WaitForSeconds(1f/3f);
-			
-                Time.timeScale = 0;
-            }
-            else{
-                Time.timeScale = 1;
-            }
-        }
-        public void SetHaptic(bool change){
-            int haptic = PlayerPrefs.GetInt("Haptic");
-		
-            if(change){
-                haptic = haptic == 0 ? 1 : 0;
-			
-                PlayerPrefs.SetInt("Haptic", haptic);
-            }
-		
-            vibrateLine.SetActive(haptic == 1);
-		
-            useHapticFeedback = haptic == 0;
+        private void OnDestroy() {
+            DOTween.KillAll();
         }
     }
+    
 }

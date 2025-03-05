@@ -1,6 +1,4 @@
-using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -25,8 +23,7 @@ namespace SVS.UI
                 PlayAnimation();
             }
         }
-        public void PlayAnimation()
-        {
+        public void PlayAnimation() {
             StopAllCoroutines();
             text.fontSize = baseFontSize;
             StartCoroutine(AnimateText(fontAnimationTime));
