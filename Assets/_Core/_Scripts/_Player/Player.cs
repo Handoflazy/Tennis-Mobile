@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Move();
-        if (serveShot || (sensor.IsBallInRange && !ball.Value.inactive)) Shoot();
+        if (serveShot || (sensor.IsBallInRange &&ball.Value &&  !ball.Value.inactive)) Shoot();
     }
 
     private void Move()
