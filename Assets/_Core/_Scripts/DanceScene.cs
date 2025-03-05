@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
-using Sirenix.OdinInspector.Editor.Validation;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+using SceneReference = Eflatun.SceneReference.SceneReference;
 
 
 [Serializable]
@@ -15,7 +16,7 @@ public class TournamentTitle{
 }
 public class DanceScene : MonoBehaviour
 {
-	[SerializeField] private SceneReference bonusScene;
+    [SerializeField] SceneReference nextScene;
     [SerializeField] Renderer[] renderers;
     [SerializeField] Material winMat;
     [SerializeField] Material loseMat;
@@ -32,23 +33,22 @@ public class DanceScene : MonoBehaviour
     [SerializeField] Text title;
     [SerializeField] Animator titleAnim;
 	
-    [SerializeField] SceneReference nextScene;
 	
     [HideInInspector]
-    [SerializeField] Animator player;
+    public Animator player;
 	
     [HideInInspector]
-    [SerializeField] Animator opponent;
+    public Animator opponent;
 	
-    [SerializeField] Text score;
+    [SerializeField] TextMeshProUGUI score;
     [SerializeField] Image bar;
 	
-    [SerializeField] AudioSource winAudio;
-    [SerializeField] AudioSource loseAudio;
+    [SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip winClip;
+    [SerializeField] AudioClip loseClip;
+    
 	
-    [SerializeField] TextMeshProUGUI bonusLabel;
-	
-    [SerializeField] Animator mainPanel;
+    [SerializeField] CanvasGroup mainPanel;
     [SerializeField] GameObject tournamentInfo;
 	
     [SerializeField] TextMeshProUGUI tournamentTitle;
@@ -65,11 +65,9 @@ public class DanceScene : MonoBehaviour
     [SerializeField] Animator transition;
 	
     [SerializeField] CanvasGroup tournamentGroup;
-    [SerializeField] CanvasGroup cupGroup;
-	
-    [SerializeField] GameObject bonusButton;
+    
     [SerializeField] GameObject playerPrefab;
-    [SerializeField]GameObject opponentPrefab;
+    [SerializeField] GameObject opponentPrefab;
     [SerializeField] private MatchInfo info;
 	
     Vector3 indicatorTarget;
@@ -84,7 +82,6 @@ public class DanceScene : MonoBehaviour
 		TryAd();
 #endif
 	    tournamentInfo.SetActive(false);
-	    bonusButton.SetActive(false);
 		
 	    if(info == null)
 		    return;
@@ -127,7 +124,7 @@ public class DanceScene : MonoBehaviour
 			    wonTournament = true;
 		    }
 			
-		    winAudio.Play();
+		    audioSource.PlayOneShot(winClip);
 	    } else {
 		    RenderSettings.fogColor = loseFog;
 		    Camera.main.backgroundColor = loseFog;
@@ -141,7 +138,21 @@ public class DanceScene : MonoBehaviour
 			
 		    PlayerPrefs.SetInt("Match", PlayerPrefs.GetInt("Match") - tournamentMatchNumber);
 			
-		    loseAudio.Play();
+		    audioSource.PlayOneShot(loseClip);
+	    }
+    }
+
+    private void Update() {
+	    bar.fillAmount += Time.deltaTime/duration;
+		
+	    if((Input.GetMouseButtonDown(0) || bar.fillAmount >= 1f) && !tournamentInfo.activeSelf)
+		    StartCoroutine(Continue());
+		
+	    if(moveIndicator){
+		    playerIndicator.position = Vector3.MoveTowards(playerIndicator.position, indicatorTarget, Time.deltaTime * indicatorSpeed);
+			
+		    if(Input.GetMouseButtonDown(0))
+			    StartCoroutine(LoadGameScene());
 	    }
     }
 #if UNITY_ADS
@@ -232,7 +243,7 @@ public class DanceScene : MonoBehaviour
 		}
 		
 		tournamentInfo.SetActive(true);
-		mainPanel.SetTrigger("Fade");
+		mainPanel.DOFade(0,.3f);
 		
 		if(!wonTournament){
 			StartCoroutine(AssignTextures(PlayerPrefs.GetInt("Tournament Match Number") - 1));
@@ -243,24 +254,14 @@ public class DanceScene : MonoBehaviour
 		}
 		else{
 			tournamentGroup.alpha = 0;
-			cupGroup.alpha = 1;
-			
-			bonusButton.SetActive(true);
 		}
 	}
-	
-	//load the bonus scene
-	public void LoadBonus(){
-		StartCoroutine(LoadScene(true));
-	}
-	
-	//load a scene (bonus scene or next scene)
-	IEnumerator LoadScene(bool bonus){
+	IEnumerator LoadGameScene(){
 		transition.SetTrigger("Transition");
 		
 		yield return new WaitForSeconds(1f/4f);
 		
-		SceneManager.LoadScene(bonus ? bonusScene.Path : nextScene.Path);
+		SceneManager.LoadScene(nextScene.Path);
 	}
     
 }

@@ -122,10 +122,6 @@ public class Player : MonoBehaviour
             HandleServeShot(direction);
         else
             HandleRegularShot(direction);
-        if (gameManager.bonus && gameManager.bonusDiamonds >= 2 + PlayerPrefs.GetInt("Bonus max"))
-        {
-            anim.PlayBonusEffect();
-        }
         ball.Value.SetLastHit(true);
         ballTargetPosition.Raise(random);
         if (!cam.enabled)
@@ -168,12 +164,7 @@ public class Player : MonoBehaviour
         float barForce = data.Force * 0.8f + (data.Force * indicatorValue * 0.3f);
         ball.Value.Velocity = direction * barForce + Vector3.up * data.UpForce;
         playerUI.ShowText(indicatorValue);
-
-        if (indicatorValue > 0.95f && !gameManager.bonus)
-        {
-            playerUI.PlayDiamondEffect();
-            PlayerPrefs.SetInt("Diamonds", PlayerPrefs.GetInt("Diamonds") + 1);
-        }
+        
 
         soundPlayer.PlayHitBallSound();
         ball.Value.Frozen(false);

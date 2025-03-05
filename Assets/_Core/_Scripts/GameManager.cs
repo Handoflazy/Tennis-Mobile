@@ -50,13 +50,7 @@ namespace _Core._Scripts
         [FoldoutGroup("Stadium"), SerializeField] private Material floor;
         [FoldoutGroup("Stadium"), SerializeField] private Material stadium;
         [FoldoutGroup("Stadium"), SerializeField] private Material court;
-
-        [Header("Bonus scene only")]
-        public bool bonus;
-        public Animator bonuspopup;
-        public TextMeshProUGUI bonuspopupLabel;
-        public TextMeshProUGUI diamondsLabel;
-        public Animator diamondLabelAnim;
+        
 
         private CameraMovement cam;
         private AudioManager audioManager;
@@ -83,7 +77,6 @@ namespace _Core._Scripts
             
 
             SetColorScheme();
-            uiManager.ToggleBonus(bonus);
         }
 
         public void SetUpGamePlay()
@@ -145,11 +138,6 @@ namespace _Core._Scripts
         private IEnumerator CheckAndReset(bool wonPoint)
         {
             resetting = true;
-            if (bonus)
-            {
-                StartCoroutine(BonusDone());
-                yield break;
-            }
             player.Value.Reset();
             opponent.Value.Reset();
 
@@ -258,31 +246,8 @@ namespace _Core._Scripts
         {
             bonusDiamonds++;
             audioManager.PlayMatchPoint();
-
-            if (!diamondsLabel.gameObject.activeSelf)
-                diamondsLabel.gameObject.SetActive(true);
-            int max = 3 + PlayerPrefs.GetInt("Bonus max");
-
-            if (bonusDiamonds >= max)
-            {
-                resetting = true;
-                diamondsLabel.gameObject.SetActive(false);
-
-                StartCoroutine(BonusDone());
-            }
-        }
-
-        private IEnumerator BonusDone()
-        {
-            PlayerPrefs.SetInt("Diamonds", PlayerPrefs.GetInt("Diamonds") + bonusDiamonds);
-            bonuspopupLabel.text = "+" + bonusDiamonds;
-            if (PlayerPrefs.GetInt("Bonus max") < maxBonusTargets - 3)
-                PlayerPrefs.SetInt("Bonus max", PlayerPrefs.GetInt("Bonus max") + 1);
-            bonuspopup.SetTrigger("Play");
-            yield return new WaitForSeconds(1f);
-            yield return new WaitForSeconds(0.25f);
-
-            SceneManager.LoadScene(0);
+            
+            
         }
         private void OnDestroy() {
             DOTween.KillAll();

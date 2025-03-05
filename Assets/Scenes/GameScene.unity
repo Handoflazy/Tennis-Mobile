@@ -1334,6 +1334,7 @@ MonoBehaviour:
   scoreUI: {fileID: 910413211}
   uiManager: {fileID: 1800080797}
   factory: {fileID: 11400000, guid: 74a108bed8249e94b8bf5ec952e2ed35, type: 2}
+  matchInfo: {fileID: 11400000, guid: 7bb68ba54a5a9ae439a8f57fd3adb18f, type: 2}
   player: {fileID: 11400000, guid: 06ad6d5dcb0302a45b42562cfb082a33, type: 2}
   opponent: {fileID: 11400000, guid: e8db097adcca1804d8bb100780a83957, type: 2}
   spawnPowerUp: {fileID: 11400000, guid: 11d365cafe44b964eaaa2f0c26973d18, type: 2}
