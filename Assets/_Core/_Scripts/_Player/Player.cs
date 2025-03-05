@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Threading.Tasks;
 using _Core._Scripts;
 using Obvious.Soap;
 using Sirenix.OdinInspector;
@@ -18,17 +20,13 @@ public class Player : MonoBehaviour
     [FoldoutGroup("Elements"), SerializeField] private PlayerUI playerUI;
 
     [Space(10)]
-    [Header("Scriptable Variables")]
+    [Header("SOAP")]
     [SerializeField] private FloatVariable indicatorValue;
     [SerializeField] private ScriptableEventVector3 ballTargetPosition;
     [SerializeField] private BallVariable ball;
     [SerializeField] private OpponentVariable opponent;
+    [SerializeField] private ScriptableEventString comboNumberEvent;
     
-    [HideInInspector] public GameObject matchLabel;
-    [HideInInspector] public Animator comboLabel;
-    [HideInInspector] public TextMeshProUGUI comboNumberLabel;
-    [HideInInspector] public Animator swipeLabel;
-
     private Vector3 targetPosition;
     private Vector3 startPos;
 
@@ -37,6 +35,7 @@ public class Player : MonoBehaviour
     private bool canShoot;
     private bool right;
     private bool moving;
+    public Observer<int> comboNumber;
 
     private CountdownTimer dragTimer;
     private GameManager gameManager;
@@ -47,10 +46,21 @@ public class Player : MonoBehaviour
     private const float ShakeDuration = 0.12f;
     private const float ShakeMagnitude = 0.5f;
 
+    private void Awake() {
+        comboNumber = new Observer<int>(0);
+    }
+
     private void Start() {
         ServiceLocator.ForSceneOf(this).Get(out gameManager);
         ServiceLocator.ForSceneOf(this).Get(out cam);
         dragTimer = new CountdownTimer(data.MaxDragTime);
+
+        comboNumber.AddListener(UpdateComboText);
+        comboNumberEvent.Raise("0");
+    }
+
+    public void UpdateComboText(int comboPoint) {
+        comboNumberEvent.Raise(comboPoint.ToString());
     }
 
     private void Update()
@@ -142,8 +152,8 @@ public class Player : MonoBehaviour
         StartCoroutine(ServeAnim(direction, indicatorValue > 0.8f));
     }
 
-    private void HandleRegularShot(Vector3 direction)
-    {
+    private void HandleRegularShot(Vector3 direction) {
+        comboNumber.Value++;
         anim.PlayAnimation(AnimConst.HitRightState);
         ball.Value.Velocity = direction * data.Force + Vector3.up * data.UpForce;
         soundPlayer.PlayHitBallSound();
@@ -190,13 +200,15 @@ public class Player : MonoBehaviour
 
     public void SetTargetPosition(Vector3 target) => targetPosition = target;
 
-    public void ComboDone(Ball ball)
+    public async void ComboDone(Ball ball)
     {
-        if (ball)
-        {
+        if (ball) {
+            comboNumber.Value += 5;
             ball.Flames();
             soundPlayer.PlayFireSound();
         }
+        await Task.Delay(1000);
+        comboNumber.Value=0;
     }
 
     public void Reset()

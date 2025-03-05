@@ -38,17 +38,9 @@ public class LoadCharacters : MonoBehaviour
 			}
 			ServiceLocator.ForSceneOf(this).Get(out CameraMovement cam);
 			cam.SetTarget(player.Value.transform);
-			AssignPlayerReferences(player.Value);
 			
 			ServiceLocator.ForSceneOf(this).Get(out GameManager gm);
 			gm.SetUpGamePlay();
 		}
-	}
-
-	void AssignPlayerReferences(Player player){
-		player.comboLabel = comboLabel;
-		player.comboNumberLabel = comboNumberLabel;
-		player.swipeLabel = swipeLabel;
-		player.matchLabel = matchLabel;
 	}
 }

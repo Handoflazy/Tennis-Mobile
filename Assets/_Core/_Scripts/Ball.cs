@@ -1,3 +1,4 @@
+
 using System;
 using _Core._Scripts;
 using DG.Tweening;
@@ -14,12 +15,11 @@ public class Ball : MonoBehaviour
     [SerializeField] private GameObject flames;
     [Header("Prefabs")]
     [SerializeField] private Material flameMat;
-    [SerializeField] private GameObject brokenFloor;
-    [SerializeField] private GameObject wrongSlideEffect;
     
     public bool inactive;
     private bool playerHit;
     private GameManager gameManager;
+    private GameEffectManager gameEffectManager;
     
     Vector3 lastVelocity;
     
@@ -31,10 +31,12 @@ public class Ball : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
+        if(gameEffectManager == null)
+            ServiceLocator.ForSceneOf(this).Get(out gameEffectManager);
         if(!other.gameObject.CompareTag("Ground"))
             return;
         if(flames.activeSelf) {
-            Instantiate(brokenFloor,transform.position - Vector3.up*4*offset,brokenFloor.transform.rotation);
+            gameEffectManager.BrokenFloor(transform.position - Vector3.up*offset*4);
             gameManager.FireBall();
             Destroy(gameObject);
         }
@@ -44,7 +46,7 @@ public class Ball : MonoBehaviour
             Out();
             return;
         }
-        Instantiate(ballEffect,transform.position - Vector3.up*offset,ballEffect.transform.rotation);
+        gameEffectManager.BallEffect(transform.position - Vector3.up*offset);
 
     }
 
@@ -71,7 +73,7 @@ public class Ball : MonoBehaviour
     }
 
     private void Out() {
-        Instantiate(wrongSlideEffect,transform.position - Vector3.up*offset,wrongSlideEffect.transform.rotation);
+        gameEffectManager.BallEffect(transform.position - Vector3.up*offset);
         gameManager.Out();
         Destroy(gameObject);
     }
@@ -87,7 +89,4 @@ public class Ball : MonoBehaviour
     public bool IsFlame() {
         return flames.activeSelf;
     }
-    
-    
-    
 }
