@@ -1571,6 +1571,7 @@ MonoBehaviour:
   indicatorValue: {fileID: 11400000, guid: dbbbef7c11e57574f9c65e6bbdafd3ed, type: 2}
   ballTargetPosition: {fileID: 11400000, guid: 3e224deea3c9a9343bff77f7bd364b12, type: 2}
   ball: {fileID: 11400000, guid: 955e821bd59249d4bb51d6c0e337b713, type: 2}
+  opponent: {fileID: 11400000, guid: e8db097adcca1804d8bb100780a83957, type: 2}
   matchLabel: {fileID: 0}
   comboLabel: {fileID: 0}
   comboNumberLabel: {fileID: 0}
@@ -1591,12 +1592,12 @@ MonoBehaviour:
   kCrossFade: 0.1
   arrowHolder: {fileID: 4765552324923974882}
   arrowAnimator: {fileID: 5513764125211387104}
+  opponent: {fileID: 11400000, guid: e8db097adcca1804d8bb100780a83957, type: 2}
   head: {fileID: 3698379740973108604}
-  lookAt: {fileID: 0}
   moveEffect: {fileID: 2206422457294361883}
   rangeCircle: {fileID: 8705892496478578113}
-  racket: {fileID: 0}
-  brokenRacket: {fileID: 0}
+  racket: {fileID: 8987557250846128678}
+  brokenRacket: {fileID: 192426194597990416}
 --- !u!114 &5171824978701370797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,7 +1642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a55acd619040a5a09c237229346a09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 11400000, guid: 98d324c71ce0e984ea81cad12cbc2d51, type: 2}
+  characterData: {fileID: 11400000, guid: 98d324c71ce0e984ea81cad12cbc2d51, type: 2}
 --- !u!1 &3698379740973076842
 GameObject:
   m_ObjectHideFlags: 0
@@ -8705,6 +8706,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8365164003783349156, guid: 8c65ffe803b92504484b9d793fdd279b, type: 3}
   m_PrefabInstance: {fileID: 625226175287880071}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8987557250846128678 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8365164003783349153, guid: 8c65ffe803b92504484b9d793fdd279b, type: 3}
+  m_PrefabInstance: {fileID: 625226175287880071}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5107851424550103266
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8782,6 +8788,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af1a9065dfcbc6741b175b6a27c05efb, type: 3}
+--- !u!1 &192426194597990416 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4920491918119827698, guid: af1a9065dfcbc6741b175b6a27c05efb, type: 3}
+  m_PrefabInstance: {fileID: 5107851424550103266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1823854309017652159 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6894195305405227869, guid: af1a9065dfcbc6741b175b6a27c05efb, type: 3}

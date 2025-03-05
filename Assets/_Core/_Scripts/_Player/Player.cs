@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
-    [FoldoutGroup("Elements"), SerializeField] private PlayerData data;
+    [FoldoutGroup("Elements"), SerializeField] private CharacterData data;
     [FoldoutGroup("Elements"), SerializeField] private SoundPlayer soundPlayer;
     [FoldoutGroup("Elements"), SerializeField] private AnimationController anim;
     [FoldoutGroup("Elements"), SerializeField] private BallSensor sensor;
@@ -22,25 +22,24 @@ public class Player : MonoBehaviour
     [SerializeField] private FloatVariable indicatorValue;
     [SerializeField] private ScriptableEventVector3 ballTargetPosition;
     [SerializeField] private BallVariable ball;
-
+    [SerializeField] private OpponentVariable opponent;
+    
     [HideInInspector] public GameObject matchLabel;
     [HideInInspector] public Animator comboLabel;
     [HideInInspector] public TextMeshProUGUI comboNumberLabel;
     [HideInInspector] public Animator swipeLabel;
 
-    private bool shoot = true;
     private Vector3 targetPosition;
     private Vector3 startPos;
-    private Vector3 startVelocity;
 
-    private bool canShoot;
     [ShowInInspector] private bool serveShot;
+    private bool shoot = true;
+    private bool canShoot;
     private bool right;
     private bool moving;
 
     private CountdownTimer dragTimer;
     private GameManager gameManager;
-    private Opponent opponent;
     private CameraMovement cam;
 
     private const float ServeAnimWaitTime = 0.28f;
@@ -48,14 +47,8 @@ public class Player : MonoBehaviour
     private const float ShakeDuration = 0.12f;
     private const float ShakeMagnitude = 0.5f;
 
-    private void Awake()
-    {
-        ServiceLocator.ForSceneOf(this).Register(this);
-    }
-
     private void Start() {
         ServiceLocator.ForSceneOf(this).Get(out gameManager);
-        ServiceLocator.ForSceneOf(this).Get(out opponent);
         ServiceLocator.ForSceneOf(this).Get(out cam);
         dragTimer = new CountdownTimer(data.MaxDragTime);
     }
@@ -74,7 +67,7 @@ public class Player : MonoBehaviour
         if (moving)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * data.Speed);
-            right = targetPosition.x < transform.position.x;
+            right = transform.InverseTransformPoint(targetPosition).x > 0;
         }
         anim.UpdateLocomotionAnim(moving, right);
     }
@@ -89,8 +82,7 @@ public class Player : MonoBehaviour
             dragTimer.Start();
             if (ball.Value)
             {
-                startVelocity = ball.Value.Velocity;
-                ball.Value.SetKinematic(true);
+                ball.Value.Frozen(true);
             }
         }
         else if (Input.GetMouseButton(0) && canShoot)
@@ -107,10 +99,8 @@ public class Player : MonoBehaviour
     private void ResetShot()
     {
         canShoot = false;
-        if (!serveShot)
-        {
-            ball.Value.SetKinematic(false);
-            ball.Value.Velocity = startVelocity;
+        if(!serveShot) {
+            ball.Value.Frozen(false,true);
         }
     }
 
@@ -142,7 +132,7 @@ public class Player : MonoBehaviour
     {
         float deltaX = currentPos.x - startPos.x;
         float xPos = Mathf.Clamp(data.SwipeSensitivity * -deltaX, -data.MoveRange, data.MoveRange);
-        return new Vector3(xPos, 0, opponent.gameObject.transform.position.z);
+        return new Vector3(xPos, 0, opponent.Value.gameObject.transform.position.z);
     }
 
     private void HandleServeShot(Vector3 direction)
@@ -157,7 +147,7 @@ public class Player : MonoBehaviour
         anim.PlayAnimation(AnimConst.HitRightState);
         ball.Value.Velocity = direction * data.Force + Vector3.up * data.UpForce;
         soundPlayer.PlayHitBallSound();
-        ball.Value.SetKinematic(false);
+        ball.Value.Frozen(false);
         StartCoroutine(cam.Shake(ShakeDuration, ShakeMagnitude));
     }
 
@@ -176,7 +166,7 @@ public class Player : MonoBehaviour
         }
 
         soundPlayer.PlayHitBallSound();
-        ball.Value.SetKinematic(false);
+        ball.Value.Frozen(false);
         StartCoroutine(cam.Shake(ShakeDuration, ShakeMagnitude));
     }
 

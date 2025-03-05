@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 32
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff458090421e56a479dca6c7c1394f76, type: 3}
+  m_Name: OpponentVariable
+  m_EditorClassIdentifier: 
+  CategoryIndex: 0
+  Description: 
+  _guid: e8db097adcca1804d8bb100780a83957
+  _saveGuid: 0
+  _value: {fileID: 0}
+  _debugLogEnabled: 0
+  _saved: 0
+  _defaultValue: {fileID: 0}
+  _resetOn: 0

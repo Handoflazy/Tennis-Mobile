@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "New Player Data",menuName = "Data/PlayerData")]
-public class PlayerData : DescriptionBaseSO //TODO: Make it  to be ServiceLocator
+public class CharacterData : DescriptionBaseSO //TODO: Make it  to be ServiceLocator
 {
     [BoxGroup("Locomotion Settings"),SerializeField] float speed;
     [BoxGroup("Locomotion Settings"),SerializeField] float turnSpeed;

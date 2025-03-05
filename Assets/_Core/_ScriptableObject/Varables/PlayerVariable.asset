@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cde10cb980a03854c82629e2c3d31826, type: 3}
-  m_Name: PlayerAnchor
+  m_Script: {fileID: 11500000, guid: 322e4f5a129d3e24cbae6e35b69451b3, type: 3}
+  m_Name: PlayerVariable
   m_EditorClassIdentifier: 
   CategoryIndex: 0
   Description: 
-  _guid: 
+  _guid: 06ad6d5dcb0302a45b42562cfb082a33
   _saveGuid: 0
   _value: {fileID: 0}
   _debugLogEnabled: 0

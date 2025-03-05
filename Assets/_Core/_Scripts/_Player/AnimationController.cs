@@ -13,9 +13,9 @@ public class AnimationController: MonoBehaviour {
     [SerializeField] private float kCrossFade = 0.1f;
     [SerializeField] Transform arrowHolder;
     [SerializeField] Animator arrowAnimator;
+    [SerializeField] OpponentVariable opponent;
     
     [SerializeField] Transform head;
-    [SerializeField] Transform lookAt;
     [SerializeField] ParticleSystem moveEffect;
     [SerializeField] Animator rangeCircle;
     [SerializeField] private GameObject racket;
@@ -23,14 +23,16 @@ public class AnimationController: MonoBehaviour {
     
     
     private float rotation;
-    private PlayerData data;
+    private Transform lookAt;
+    private CharacterData data;
 
     private void Start() {
         ServiceLocator.For(this).Get(out DataMediator dataMediator);
-        data = dataMediator.PlayerData;
+        data = dataMediator.CharacterData;
         
         ToggleRangeCircle(false);
         moveEffect.Stop();
+        lookAt = opponent.Value.transform;
     }
     private void LateUpdate() {
         if(lookAt)
