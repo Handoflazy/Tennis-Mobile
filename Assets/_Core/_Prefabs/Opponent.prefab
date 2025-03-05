@@ -6862,20 +6862,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f67bd75c33542ba817876bd0c31f59d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 6.5
-  turnSpeed: 6
+  player: {fileID: 11400000, guid: 06ad6d5dcb0302a45b42562cfb082a33, type: 2}
+  soundPlayer: {fileID: 5233663296292631083}
+  data: {fileID: 11400000, guid: d4a4a1818dd4c1640b74ebe803da5545, type: 2}
+  ball: {fileID: 11400000, guid: 955e821bd59249d4bb51d6c0e337b713, type: 2}
+  servePoint: {fileID: 5664348148117290817}
   anim: {fileID: 8931480073545856694}
   head: {fileID: 8931480073554942306}
   lookAt: {fileID: 0}
   moveParticles: {fileID: 6214822905242796293}
-  ball: {fileID: 11400000, guid: 955e821bd59249d4bb51d6c0e337b713, type: 2}
   arrow: {fileID: 3699837309891899652}
-  force: 9.7
-  upForce: 8.5
-  player: {fileID: 0}
-  moveRange: 4.3
-  servePoint: {fileID: 5664348148117290817}
-  soundPlayer: {fileID: 5233663296292631083}
   notRotating: 0
   followBall: 0
 --- !u!54 &5451495774838743568
@@ -6929,7 +6925,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 8931480073554942289}
           m_TargetAssemblyTypeName: Opponent, Assembly-CSharp
-          m_MethodName: SetTarget
+          m_MethodName: SetTargetPosition
           m_Mode: 0
           m_Arguments:
             m_ObjectArgument: {fileID: 0}

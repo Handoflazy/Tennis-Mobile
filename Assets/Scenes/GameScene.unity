@@ -2307,6 +2307,7 @@ MonoBehaviour:
   winScene:
     asset: {fileID: 102900000, guid: 65dd087983b42674699a717d176bbbd6, type: 3}
     guid: 65dd087983b42674699a717d176bbbd6
+  scoreUI: {fileID: 0}
   playerServeOnly: 0
   pointsToWin: 3
   transition: {fileID: 712014687}
@@ -2314,6 +2315,8 @@ MonoBehaviour:
   canvas: {fileID: 1800080792}
   cameraMovement: {fileID: 1699921715}
   ballPrefab: {fileID: 6711092024995089002, guid: 7bb80ce60ca70b24ea2b2f89af7cd46c, type: 3}
+  player: {fileID: 11400000, guid: 06ad6d5dcb0302a45b42562cfb082a33, type: 2}
+  opponent: {fileID: 11400000, guid: e8db097adcca1804d8bb100780a83957, type: 2}
   uiManager: {fileID: 1800080797}
   spawnPos: {fileID: 915031986}
   opponentSpawnPos: {fileID: 274689636}
@@ -2325,8 +2328,6 @@ MonoBehaviour:
   - {fileID: 260068276}
   - {fileID: 1012597498}
   - {fileID: 2114662748}
-  playerPointsLabel: {fileID: 732260903}
-  opponentPointsLabel: {fileID: 1803855205}
   matchPoint: {fileID: 1087326910}
   colorSchemes:
   - floor: {r: 0.30980393, g: 0.5764706, b: 0.7725491, a: 0}
@@ -5246,7 +5247,7 @@ GameObject:
   - component: {fileID: 910413210}
   - component: {fileID: 910413209}
   - component: {fileID: 910413208}
-  - component: {fileID: 910413207}
+  - component: {fileID: 910413211}
   m_Layer: 5
   m_Name: Score
   m_TagString: Untagged
@@ -5254,23 +5255,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &910413207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910413206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 55
 --- !u!114 &910413208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5338,6 +5322,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 3.9}
   m_SizeDelta: {x: 10, y: 4}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &910413211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910413206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a83444a1d92c4d078d154e56363b0d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  matchLabel: {fileID: 924011669}
+  playerScore: {fileID: 732260903}
+  opponentScore: {fileID: 1803855205}
 --- !u!1 &915031985
 GameObject:
   m_ObjectHideFlags: 0
@@ -9791,6 +9790,8 @@ MonoBehaviour:
   scoreTexts: {fileID: 2102935}
   matchLabel: {fileID: 924011667}
   playerOnly: 0
+  player: {fileID: 11400000, guid: 06ad6d5dcb0302a45b42562cfb082a33, type: 2}
+  opponent: {fileID: 11400000, guid: e8db097adcca1804d8bb100780a83957, type: 2}
   playerPrefab: {fileID: 3698379741122613559, guid: efe0534eb89d5d249b01ba37426ab947, type: 3}
   opponentPrefab: {fileID: 8931480073554942289, guid: 809b4787e4b47294fbbc604e3238d1ab, type: 3}
 --- !u!1 &1552341515
@@ -16293,6 +16294,7 @@ MonoBehaviour:
   gamePanel: {fileID: 719279845}
   SwipeLabel: {fileID: 1002714804}
   CountdownServe: {fileID: 1357911874}
+  transition: {fileID: 0}
 --- !u!1 &1803855203
 GameObject:
   m_ObjectHideFlags: 0

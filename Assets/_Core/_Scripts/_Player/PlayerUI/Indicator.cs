@@ -22,7 +22,7 @@ public class Indicator : MonoBehaviour
 
     private void Start() {
         ServiceLocator.For(this).Get(out DataMediator dataMediator);
-        powerBarMaxWaitTime =dataMediator.PlayerData.PowerBarMaxSlowdown;
+        powerBarMaxWaitTime =dataMediator.CharacterData.PowerBarMaxSlowdown;
     }
 
     /// <summary>

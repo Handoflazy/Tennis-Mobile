@@ -21,6 +21,8 @@ public class Ball : MonoBehaviour
     private bool playerHit;
     private GameManager gameManager;
     
+    Vector3 lastVelocity;
+    
     private readonly int pausedHash = Animator.StringToHash("Paused");
 
     private void Start() {
@@ -52,7 +54,13 @@ public class Ball : MonoBehaviour
     public bool GetLastHit() {
         return playerHit;
     }
-    public void SetKinematic(bool value) {
+    public void Frozen(bool value, bool applyLastVelocity = false) {
+        if(value) {
+            lastVelocity = rb.velocity;
+        }
+        else if(applyLastVelocity) {
+            rb.velocity = lastVelocity;
+        }
         rb.isKinematic = value;
         circle.SetBool(pausedHash, value);
     }
@@ -79,4 +87,7 @@ public class Ball : MonoBehaviour
     public bool IsFlame() {
         return flames.activeSelf;
     }
+    
+    
+    
 }

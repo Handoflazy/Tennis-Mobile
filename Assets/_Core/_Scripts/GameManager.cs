@@ -8,6 +8,7 @@ using Obvious.Soap;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityServiceLocator;
 using Utilities.Extensions;
 using Random = UnityEngine.Random;
@@ -23,6 +24,7 @@ namespace _Core._Scripts
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private SceneReference winScene;
+        [SerializeField] private ScoreUIManager scoreUI;
         [SerializeField] private bool playerServeOnly;
         [SerializeField] private int pointsToWin = 3;
         [SerializeField] private Animator transition;
@@ -31,8 +33,8 @@ namespace _Core._Scripts
 //[SerializeField] private VisitorSpawner visitors;
         [SerializeField] private CameraMovement cameraMovement;
         public GameObject ballPrefab;
-        private Player player;
-        private Opponent opponent;
+        [SerializeField] PlayerVariable player;
+        [SerializeField] OpponentVariable opponent;
         [SerializeField]
         UIManager uiManager;
         
@@ -44,8 +46,6 @@ namespace _Core._Scripts
         [SerializeField] private BallVariable ballVariable;
         
         [SerializeField] private GameObject[] confetti;
-        [SerializeField] TextMeshProUGUI playerPointsLabel;
-        [SerializeField] TextMeshProUGUI opponentPointsLabel;
         [SerializeField] GameObject matchPoint;
         
         public ColorScheme[] colorSchemes;
@@ -78,7 +78,6 @@ namespace _Core._Scripts
         bool playerServe;
         public int bonusDiamonds;
         [SerializeField] private GameObject scoreTexts;
-        [SerializeField] private GameObject matchLabel;
 
         private void Awake() {
             ServiceLocator.ForSceneOf(this).Register(this);
@@ -105,25 +104,18 @@ namespace _Core._Scripts
 
         }
 
-        public async void SetUpGamePlay() {
-            ServiceLocator.ForSceneOf(this).Get(out player);
-            ServiceLocator.ForSceneOf(this).Get(out opponent);
-            
+        public void SetUpGamePlay() {
             playerPoints = 0;
             opponentPoints = 0;
-            playerPointsLabel.text = "0";
-            opponentPointsLabel.text = "0";
-            playerServe = true;
-            await Task.Yield();
-            player.SetServe(true);
+            StartCoroutine(scoreUI.UpdatePlayerScore(playerPoints));
+            StartCoroutine(scoreUI.UpdateOpponentScore(opponentPoints));
+            playerServe = false;
+            player.Value.SetServe(true);
         }
         public void StartGame() {
             uiManager.HideStartPanel();
             uiManager.ShowGamePanel();
-            if(scoreTexts != null){
-                scoreTexts.SetActive(true);
-                matchLabel.SetActive(false);
-            }
+            scoreUI.HideMatchLabel();
         }
         
         
@@ -172,8 +164,8 @@ namespace _Core._Scripts
                 StartCoroutine(BonusDone());
                 yield break;
             }
-            player.Reset();
-            opponent.Reset();
+            player.Value.Reset();
+            opponent.Value.Reset();
             
             yield return new WaitForSeconds(0.75f);
             cameraMovement.SwitchTargetTemp(scoreCamTarget, 1.5f, 0.5f);
@@ -187,18 +179,14 @@ namespace _Core._Scripts
                     conf.SetActive(true);
                     yield return new WaitForSeconds(0.15f);
                 }
-                playerPointsLabel.rectTransform.DOScaleY(1.2f, 0.25f).SetEase(Ease.OutBack).OnComplete(() => playerPointsLabel.rectTransform.DOScaleY(1f, 0.25f));
+                yield return scoreUI.UpdatePlayerScore(playerPoints);
                 audioManager.PlayScorePoint();
             }
             else
             {
-                opponentPointsLabel.rectTransform.DOScaleY(1.2f, 0.25f).SetEase(Ease.OutBack).OnComplete(() => playerPointsLabel.rectTransform.DOScaleY(1f, 0.25f));
+                yield return scoreUI.UpdateOpponentScore(opponentPoints);
                 audioManager.PlayLosePoint();
             }
-            yield return new WaitForSeconds(1f/6f);
-            opponentPointsLabel.text = "" + opponentPoints;
-            playerPointsLabel.text = "" + playerPoints;
-            
             spawnPowerUp.Raise();
             
             yield return new WaitForSeconds(0.25f);
@@ -227,7 +215,7 @@ namespace _Core._Scripts
             }
             if(!playerServeOnly){
                 if(playerServe){
-                    player.SetServe(true);
+                    player.Value.SetServe(true);
                 }
                 else{
                     StartCoroutine(OpponentServe());
@@ -236,7 +224,7 @@ namespace _Core._Scripts
                 playerServe = !playerServe;
             }
             else{
-                player.SetServe(true);
+                player.Value.SetServe(true);
             }
             resetting = false;
         }
@@ -261,13 +249,13 @@ namespace _Core._Scripts
             countDown.PlayAnimation("Countdown serve play");
             yield return new WaitForSeconds(3f);
 		
-            StartCoroutine(opponent.JustHit());
+            StartCoroutine(opponent.Value.JustHit());
 		
-            opponent.anim.PlayAnimation(AnimConst.ServeState);
+            opponent.Value.PlayerServeAnimation();
 		
             yield return new WaitForSeconds(0.28f);
             Serve();
-            opponent.HitBall(true, opponentSpawnPos);
+            opponent.Value.HitBall(true, opponentSpawnPos);
         }
         void SetColorScheme() {
             int random = Random.Range(0, colorSchemes.Length);

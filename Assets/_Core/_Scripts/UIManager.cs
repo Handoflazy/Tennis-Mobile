@@ -19,7 +19,7 @@ public class UIManager : MonoBehaviour
     [SerializeField, Required] private Animator SwipeLabel;
     [FoldoutGroup("Game Panel")]
     [SerializeField, Required] private Animator CountdownServe;
-
+    [SerializeField] private Animator transition;
     private void Awake() {
         ServiceLocator.ForSceneOf(this).Register(this);
     }
