@@ -242,12 +242,17 @@ namespace _Core._Scripts
             LosePoint();
         }
 
-        public void AddBonus()
-        {
-            bonusDiamonds++;
-            audioManager.PlayMatchPoint();
-            
-            
+        [Button("Reset")]
+        public void ResetGame() {
+            PlayerPrefs.SetInt(SaveConst.TOURNAMENT, 0);
+            PlayerPrefs.SetInt(SaveConst.MATCH, 0);
+            PlayerPrefs.SetInt(SaveConst.TOURNAMENT_MATCH_NUMBER, 0);
+            SceneManager.LoadScene(winScene.Path);
+        }
+        [Button("Win Match")]
+        public void WinMatch() {
+            matchInfo.SetMatchInfo(true, "3-2");
+            SceneManager.LoadScene(winScene.Path);
         }
         private void OnDestroy() {
             DOTween.KillAll();

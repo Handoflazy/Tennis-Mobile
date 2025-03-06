@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6eb26142f1b4b279f6979db71a33df3, type: 3}
   m_Name: Outfit_ 1
   m_EditorClassIdentifier: 
-  HatType: 0
-  Glasses: 0
-  Female: 0
-  HairType: 0
-  Skin: {fileID: 0}
-  HatMat: {fileID: 0}
-  Shirt: {fileID: 0}
-  Pants: {fileID: 0}
-  Shoes: {fileID: 0}
-  Racket: {fileID: 0}
-  Hair: {fileID: 0}
+  HatType: 1
+  Glasses: 1
+  Female: 1
+  HairType: 1
+  Skin: {fileID: 2100004, guid: a2061ef3dfe4e6c43bd4f40719cefd0b, type: 3}
+  HatMat: {fileID: 2100000, guid: 9c8951d5dfe916949bef5f18037c05e7, type: 2}
+  Shirt: {fileID: 2100000, guid: f5acdfd1916756f449b33fdd0d559d5e, type: 2}
+  Pants: {fileID: 2100000, guid: d375c8b20ca215e478f4eb74204289a5, type: 2}
+  Shoes: {fileID: 2100000, guid: f136c7cf1acc4554d92ec4e490cbb352, type: 2}
+  Racket: {fileID: 2100004, guid: 88c7e3b7ef2c7bc44a2dacba11148189, type: 3}
+  Hair: {fileID: 2100000, guid: 0e180e80aff8f9a4c8e5e984bd5ab510, type: 2}

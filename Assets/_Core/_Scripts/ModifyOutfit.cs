@@ -36,7 +36,7 @@ public class ModifyOutfit : MonoBehaviour
             outfit = Resources.Load<Outfit>("Outfit_" + index);
         }
         else{
-            int index = PlayerPrefs.GetInt("Player");
+            int index = PlayerPrefs.GetInt("Player",0);
             outfit = Resources.Load<Outfit>("Player_" + index);
         }
 		

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -196,7 +197,14 @@ public class DanceScene : MonoBehaviour
 	    PlayerPrefs.SetInt("Opponent " + middleLayerWinnerTop, match + 2);
 	    
     }
-    void LoadCharacters(){
+    [Button("TestAssingTextures")]
+    public void TestAssingTextures(){
+	    StartCoroutine(AssignTextures(0));
+	}
+    
+    
+    [Button("LoadCharacters")]
+    public void LoadCharacters(){
 	    GameObject playerCharacter = Instantiate(playerPrefab, characters[0].position, characters[0].rotation);
 	    playerCharacter.GetComponent<Player>().enabled = false;
 	    playerCharacter.GetComponent<AnimationController>().enabled = false;
@@ -206,7 +214,7 @@ public class DanceScene : MonoBehaviour
 		    int index = PlayerPrefs.GetInt("Opponent " + i);
 			
 		    GameObject opponentCharacter = Instantiate(opponentPrefab, characters[i].position, characters[i].rotation);
-		    //opponentCharacter.GetComponent<ModifyOutfit>().Initialize(index);
+		    opponentCharacter.GetComponent<ModifyOutfit>().Initialize(index);
 		    opponentCharacter.GetComponent<Opponent>().enabled = false;
 		    opponentCharacter.GetComponent<Animator>().runtimeAnimatorController = idle;
 	    }
