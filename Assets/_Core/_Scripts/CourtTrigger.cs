@@ -13,6 +13,7 @@ public class CourtTrigger : MonoBehaviour
         if(!ball.inactive) {
             courtTriggered.Raise(net);
             ball.inactive = true;
+            ball.Frozen(false);
         }
     }
 }

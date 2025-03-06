@@ -73,7 +73,7 @@ public class Ball : MonoBehaviour
     }
 
     private void Out() {
-        gameEffectManager.BallEffect(transform.position - Vector3.up*offset);
+        gameEffectManager.WrongSlide(transform.position - Vector3.up*offset);
         gameManager.Out();
         Destroy(gameObject);
     }

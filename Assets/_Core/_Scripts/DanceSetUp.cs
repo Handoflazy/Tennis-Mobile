@@ -22,7 +22,8 @@ public class DanceSetUp: MonoBehaviour {
 			
         GameObject newPlayer = Instantiate(playerPrefab.gameObject, playerPosition.position, playerPosition.rotation);
         newPlayer.GetComponent<Player>().enabled = false;
-        newPlayer.GetComponentInChildren<AnimationController>().enabled = false;
+        newPlayer.GetComponent<AnimationController>().enabled = false;
+        newPlayer.GetComponent<DataMediator>().enabled = false;
 		
         newOpponent.GetComponent<Animator>().runtimeAnimatorController = danceController;
         newPlayer.GetComponent<Animator>().runtimeAnimatorController = danceController;

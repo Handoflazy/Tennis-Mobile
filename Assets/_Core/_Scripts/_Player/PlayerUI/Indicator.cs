@@ -21,6 +21,10 @@ public class Indicator : MonoBehaviour
     private float powerBarMaxWaitTime = 0.3f;
 
     private void Start() {
+        if(!transform.root.GetComponent<Player>().isActiveAndEnabled) {
+            this.enabled = false;
+            return;
+        }
         ServiceLocator.For(this).Get(out DataMediator dataMediator);
         powerBarMaxWaitTime =dataMediator.CharacterData.PowerBarMaxSlowdown;
     }
@@ -30,7 +34,7 @@ public class Indicator : MonoBehaviour
     /// </summary>
     /// <param name="barSpeed">The speed of the power bar.</param>
     public void Show(float barSpeed) {
-        anim.SetBool(AnimConst.ActiveParam, true);
+        anim.SetBool(AnimConst.ACTIVE_PARAM, true);
         indicatorFill.fillAmount = 0;
         delta = 1f;
         powerBarSpeed = barSpeed;
@@ -40,11 +44,11 @@ public class Indicator : MonoBehaviour
     /// Hides the indicator.
     /// </summary>
     public void Hide() {
-        anim.SetBool(AnimConst.ActiveParam, false);
+        anim.SetBool(AnimConst.ACTIVE_PARAM, false);
     }
 
     private void Update() {
-        if(!anim.GetBool(AnimConst.ActiveParam)) return;
+        if(!anim.GetBool(AnimConst.ACTIVE_PARAM)) return;
 
         float fillSpeed = indicatorFill.fillAmount < MinFillSpeed ? MinFillSpeed : indicatorFill.fillAmount;
         if(indicatorFill.fillAmount > 0.95f && delta > 0) fillSpeed /= powerBarMaxSlowdown;
@@ -60,7 +64,7 @@ public class Indicator : MonoBehaviour
 
     private IEnumerator PowerBarMax() {
         max = true;
-        anim.SetTrigger(AnimConst.MaxParam);
+        anim.SetTrigger(AnimConst.MAX_PARAM);
         yield return new WaitForSeconds(powerBarMaxWaitTime);
         max = false;
     }

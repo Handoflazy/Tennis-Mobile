@@ -150,7 +150,7 @@ public class Player : MonoBehaviour
 
     private void HandleRegularShot(Vector3 direction) {
         comboNumber.Value++;
-        anim.PlayAnimation(AnimConst.HitRightState);
+        anim.PlayAnimation(AnimConst.HIT_RIGHT_STATE);
         ball.Value.Velocity = direction * data.Force + Vector3.up * data.UpForce;
         soundPlayer.PlayHitBallSound();
         ball.Value.Frozen(false);
@@ -159,7 +159,7 @@ public class Player : MonoBehaviour
 
     private IEnumerator ServeAnim(Vector3 direction, bool powerShot)
     {
-        anim.PlayAnimation(powerShot ? AnimConst.PowerServeState : AnimConst.ServeState);
+        anim.PlayAnimation(powerShot ? AnimConst.POWER_SERVE_STATE : AnimConst.SERVE_STATE);
         yield return new WaitForSeconds(ServeAnimWaitTime);
         float barForce = data.Force * 0.8f + (data.Force * indicatorValue * 0.3f);
         ball.Value.Velocity = direction * barForce + Vector3.up * data.UpForce;

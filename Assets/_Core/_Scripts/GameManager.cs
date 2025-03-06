@@ -4,11 +4,9 @@ using DG.Tweening;
 using Eflatun.SceneReference;
 using Obvious.Soap;
 using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityServiceLocator;
-using Utilities.Extensions;
 using Random = UnityEngine.Random;
 
 namespace _Core._Scripts
@@ -85,7 +83,9 @@ namespace _Core._Scripts
             opponentPoints = 0;
             StartCoroutine(scoreUI.UpdatePlayerScore(playerPoints));
             StartCoroutine(scoreUI.UpdateOpponentScore(opponentPoints));
-            scoreUI.ShowMatchLabel("Tournament match");
+            
+            int tournament = PlayerPrefs.GetInt(SaveConst.TOURNAMENT) + 1;
+            scoreUI.ShowMatchLabel("Tournament #" + tournament);
             playerServe = false;
             player.Value.SetServe(true);
         }
@@ -206,7 +206,7 @@ namespace _Core._Scripts
             yield return new WaitForSeconds(0.25f);
             
             matchInfo.SetMatchInfo(wonMatch,playerPoints + " - " + opponentPoints);
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
             SceneManager.LoadScene(winScene.Path);
         }

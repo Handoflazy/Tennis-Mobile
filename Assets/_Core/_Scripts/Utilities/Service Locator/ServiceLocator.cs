@@ -124,11 +124,18 @@ namespace UnityServiceLocator
             return container != null;
         }
         #endregion
-
+        
+        
+        // Method to unregister a service of type T
+        public ServiceLocator Unregister<T>(T service) {
+            services.Unregister<T>();
+            return this;
+        }
         private void OnDestroy() {
+            
             if(this == _global) {
                 _global = null;
-            } else if(_sceneContainers.ContainsValue(this)) {
+            } else if(_sceneContainers !=null && _sceneContainers.ContainsValue(this)) {
                 _sceneContainers.Remove(gameObject.scene);
             }
             services.Clear();

@@ -15,14 +15,14 @@ MonoBehaviour:
   Description: 
   speed: 8
   turnSpeed: 6
+  moveRange: 4.3
+  ballMoveSpeed: 10
   ballRange: 4
   force: 12
   upForce: 8.5
-  moveRange: 4.3
-  powerbarSpeedMin: 4
-  powerbarSpeedMax: 4.5
-  powerbarMaxSlowdown: 15
-  ballMoveSpeed: 10
+  powerBarSpeedMin: 4
+  powerBarSpeedMax: 4.5
+  powerBarMaxSlowdown: 0
   maxDragTime: 1.7
   dragDistance: 40
   swipeSensitivity: 0.08

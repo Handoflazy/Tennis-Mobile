@@ -100,7 +100,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowTransition()
     {
-        transition.SetTrigger(AnimConst.TransitionParam);
+        transition.SetTrigger(AnimConst.TRANSITION_PARAM);
     }
 
     public void HideStartPanel()
@@ -131,10 +131,10 @@ public class UIManager : MonoBehaviour
 
     public void Pause()
     {
-        var toggle = !pausePanel.GetBool(AnimConst.ShowParam);
+        var toggle = !pausePanel.GetBool(AnimConst.SHOW_PARAM);
         pausePanel.gameObject.SetActive(toggle);
-        pausePanel.SetBool(AnimConst.ShowParam, toggle);
-        StartCoroutine(Freeze(pausePanel.GetBool(AnimConst.ShowParam)));
+        pausePanel.SetBool(AnimConst.SHOW_PARAM, toggle);
+        StartCoroutine(Freeze(pausePanel.GetBool(AnimConst.SHOW_PARAM)));
     }
 
     private IEnumerator Freeze(bool freeze)

@@ -24,11 +24,12 @@ namespace SVS.UI
             }
         }
         public void PlayAnimation() {
-            StopAllCoroutines();
-            text.fontSize = baseFontSize;
-            StartCoroutine(AnimateText(fontAnimationTime));
-
-
+            if(gameObject.activeInHierarchy)
+            {
+                StopAllCoroutines();
+                text.fontSize = baseFontSize;
+                StartCoroutine(AnimateText(fontAnimationTime));
+            }
         }
         IEnumerator AnimateText(float animationTime)
         {

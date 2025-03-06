@@ -47,7 +47,7 @@ public class Opponent : MonoBehaviour
     private void Update() => Move();
 
     public void PlayerServeAnimation() {
-        anim.PlayAnimation(AnimConst.ServeState);
+        anim.PlayAnimation(AnimConst.SERVE_STATE);
     }
     private void LateUpdate()
     {
@@ -103,9 +103,9 @@ public class Opponent : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        if (!anim.IsAnimationPlaying(AnimConst.ServeState) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.6f)
+        if (!anim.IsAnimationPlaying(AnimConst.SERVE_STATE) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.6f)
         {
-            anim.PlayAnimation(moving ? (right ? AnimConst.RunRightState : AnimConst.RunLeftState) : AnimConst.IdleState);
+            anim.PlayAnimation(moving ? (right ? AnimConst.RUN_RIGHT_STATE : AnimConst.RUN_LEFT_STATE) : AnimConst.IDLE_STATE);
         }
     }
 
@@ -120,12 +120,12 @@ public class Opponent : MonoBehaviour
         if (xDistance > MaxXDistance)
         {
             if (Random.Range(0, 2) == 0)
-                anim.PlayAnimation(AnimConst.HitRightState);
+                anim.PlayAnimation(AnimConst.HIT_RIGHT_STATE);
             return;
         }
 
         StartCoroutine(JustHit());
-        anim.PlayAnimation(AnimConst.HitRightState);
+        anim.PlayAnimation(AnimConst.HIT_RIGHT_STATE);
         HitBall(false, null);
     }
 
