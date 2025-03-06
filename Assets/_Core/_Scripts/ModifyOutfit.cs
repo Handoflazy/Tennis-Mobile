@@ -21,6 +21,12 @@ public class ModifyOutfit : MonoBehaviour
     [SerializeField] bool dontUpdateOnAwake;
     
     
+    public void SetOutfit(Outfit outfit)
+    {
+        this.outfit = outfit;
+        SetOutfit(false);
+    }
+    
     void OnValidate(){
         if(outfit == null)
             return;
