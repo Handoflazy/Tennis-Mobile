@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Utilities.Extensions;
 using UnityEngine;
 using Utilities;
+using Utilities.Extensions;
 using Object = UnityEngine.Object;
 
 namespace UnityUtils {

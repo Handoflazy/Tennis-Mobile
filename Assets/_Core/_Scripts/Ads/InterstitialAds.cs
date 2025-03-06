@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.Events;
 
 namespace _Core._Scripts.Ads
 {
@@ -9,6 +10,8 @@ namespace _Core._Scripts.Ads
         [SerializeField] private string androidAdUnitID ;
         [SerializeField] private string iosAdUnitID;
         private string adUnitID;
+
+        public UnityAction OnAdClosed = delegate {  };
 
         private void Awake() {
 #if UNITY_IOS
@@ -40,17 +43,18 @@ namespace _Core._Scripts.Ads
 
         #region ShowCallBacks
         public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message) {
-           
+            OnAdClosed.Invoke();
         }
 
         public void OnUnityAdsShowStart(string placementId) {
            
         }
         public void OnUnityAdsShowClick(string placementId) {
-           
+            OnAdClosed.Invoke();
         }
 
         public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState) {
+            OnAdClosed.Invoke();
         }
         #endregion
 

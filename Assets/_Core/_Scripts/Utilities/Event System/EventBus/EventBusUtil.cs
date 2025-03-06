@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Utilities;
 using UnityEditor;
 using UnityEngine;
+using Utilities;
 
 namespace Utilities.Event_System.EventBus
 {

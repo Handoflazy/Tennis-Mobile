@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using _Core._Scripts.Ads;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -81,9 +83,6 @@ public class DanceScene : MonoBehaviour
     
     
     void Awake(){
-#if UNITY_ADS
-		TryAd();
-#endif
 	    tournamentInfo.SetActive(false);
 	    nextButton.SetActive(false);
 		
@@ -165,16 +164,16 @@ public class DanceScene : MonoBehaviour
 			    StartCoroutine(LoadGameScene());
 	    }
     }
-#if UNITY_ADS
-	void TryAd(){
-		AdManager adManager = GameObject.FindObjectOfType<AdManager>();
-		
-		if(adManager == null)
-			return;
-		
-		adManager.Interstitial();
-	}
-#endif
+    IEnumerator TryAd() {
+	    bool wait = true;
+	    AdsManager.Instance.interstitialAds.OnAdClosed += () => {
+		    wait = false;
+	    };
+	    AdsManager.Instance.interstitialAds.ShowInterstitialAd();
+	    while (wait) {
+		    yield return null;
+	    }
+    }
     private void SetCharacterData() {
 	    
 	    PlayerPrefs.SetInt(SaveConst.MIDDLE_LAYER_PLAYER_OPPONENT, Random.Range(0, 2) + 2);
@@ -197,10 +196,6 @@ public class DanceScene : MonoBehaviour
 	    PlayerPrefs.SetInt("Opponent " + middleLayerWinnerTop, match + 2);
 	    
     }
-    [Button("TestAssingTextures")]
-    public void TestAssingTextures(){
-	    StartCoroutine(AssignTextures(0));
-	}
     
     
     [Button("LoadCharacters")]
@@ -257,7 +252,6 @@ public class DanceScene : MonoBehaviour
 	IEnumerator Continue(){
 		if(!won){			
 			SceneManager.LoadScene(nextScene.Path);
-			
 			yield break;
 		}
 		
@@ -278,6 +272,7 @@ public class DanceScene : MonoBehaviour
 		}
 	}
 	IEnumerator LoadGameScene(){
+		StartCoroutine(TryAd());
 		transition.SetTrigger(AnimConst.TRANSITION_PARAM);
 		
 		yield return new WaitForSeconds(1f/4f);

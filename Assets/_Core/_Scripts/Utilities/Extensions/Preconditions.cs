@@ -1,6 +1,6 @@
 using System;
-using Utilities.Extensions;
 using UnityUtils;
+using Utilities.Extensions;
 
 namespace Utilities
 {

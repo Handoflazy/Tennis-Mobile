@@ -1609,9 +1609,9 @@ MonoBehaviour:
   maxDragTime: 1
   dragDistance: 40
   transitionSpeed: 15
-  rightButton: {fileID: 382580589}
-  leftButton: {fileID: 1591469020}
-  unlockButton: {fileID: 1250284671}
+  rightButton: {fileID: 382580591}
+  leftButton: {fileID: 1591469022}
+  unlockButton: {fileID: 1250284673}
 --- !u!1 &2089723280
 GameObject:
   m_ObjectHideFlags: 0

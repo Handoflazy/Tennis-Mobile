@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityServiceLocator;
@@ -18,6 +18,8 @@ public class GameEffectManager : MonoBehaviour
     private GameObject ballEffect;
 
     private CountdownTimer timer;
+    
+    private readonly CancellationTokenSource cancellationTokenSource = new ();
     
     private void Awake() {
         brokenFloor = Instantiate(brokenFloorPrefab, Vector3.zero, brokenFloorPrefab.transform.rotation, transform);
@@ -61,19 +63,23 @@ public class GameEffectManager : MonoBehaviour
     public async void BrokenFloor(Vector3 position) {
         brokenFloor.transform.position = position;
         brokenFloor.SetActive(true);
-        await Task.Delay(2000);
+        await Task.Delay(2000,cancellationTokenSource.Token);
         brokenFloor.SetActive(false);
     }
     public async void WrongSlide(Vector3 position) {
         wrongSlide.transform.position = position;
         wrongSlide.SetActive(true);
-        await Task.Delay(2000);
+        await Task.Delay(2000,cancellationTokenSource.Token);
         wrongSlide.SetActive(false);
     }
     public async void BallEffect(Vector3 position) {
         ballEffect.transform.position = position;
         ballEffect.SetActive(true);
-        await Task.Delay(2000);
+        await Task.Delay(2000,cancellationTokenSource.Token);
         ballEffect.SetActive(false);
     }
- }
+
+    private void OnDestroy() {
+        cancellationTokenSource.Cancel();
+    }
+}

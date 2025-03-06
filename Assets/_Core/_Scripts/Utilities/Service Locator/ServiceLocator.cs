@@ -1,10 +1,10 @@
-﻿using System.Linq;
-using Utilities.Extensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utilities.Extensions;
 
 namespace UnityServiceLocator
 {

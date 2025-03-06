@@ -1,6 +1,6 @@
+using Obvious.Soap;
 using UnityEngine;
 using UnityEngine.Events;
-using Obvious.Soap;
 
 [AddComponentMenu("Soap/EventListeners/EventListener"+nameof(Player))]
 public class EventListenerPlayer : EventListenerGeneric<Player>

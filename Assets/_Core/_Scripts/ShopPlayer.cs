@@ -1,9 +1,11 @@
 using System;
+using _Core._Scripts.Ads;
 using Eflatun.SceneReference;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 [Serializable]
 public class Character{
@@ -24,9 +26,9 @@ public class ShopPlayer : MonoBehaviour
 	[SerializeField] float dragDistance;
 	[SerializeField] float transitionSpeed;
 	[Header("Button")]
-	[SerializeField] GameObject rightButton;
-	[SerializeField] GameObject leftButton;
-	[SerializeField] GameObject unlockButton;
+	[SerializeField] Button rightButton;
+	[SerializeField] Button leftButton;
+	[SerializeField] Button unlockButton;
 	
     float startPos;
     float startTime;
@@ -39,7 +41,17 @@ public class ShopPlayer : MonoBehaviour
 	
     int mannequinCount;
 
+    private void Awake() {
+	    AdsManager.Instance.rewardedAds.AdsAvailable.AddListener(UpdateUnlockButtonState);;
+    }
+
+    private void OnDisable() {
+	    AdsManager.Instance.rewardedAds.AdsAvailable.RemoveListener(UpdateUnlockButtonState);
+    }
+
     private void Start() {
+	    
+	    
 	    bool doneLoading = false;
 	    Vector3 pos = Vector3.zero;
 	    while(!doneLoading){
@@ -107,24 +119,43 @@ public class ShopPlayer : MonoBehaviour
 		    nameLabel.text = characters[current].name;
 		
 	    bool unlocked = PlayerPrefs.GetInt("Unlocked" + current) == 1 || current < 4;
-		
-	    unlockButton.SetActive(!unlocked);
-	    leftButton.SetActive(current > 0);
-	    rightButton.SetActive(current < mannequinCount - 1);
+
+	    
+	    unlockButton.gameObject.SetActive(!unlocked);
+	    if(!unlocked&&AdsManager.Instance.rewardedAds.AdsAvailable.Value) {
+		    unlockButton.interactable = true;
+	    } else {
+		    unlockButton.interactable = false;
+	    }
+	    leftButton.interactable = (current > 0);
+	    rightButton.interactable =  (current < mannequinCount - 1);
     }
     
     public void Select(){
 	    PlayerPrefs.SetInt("Player", current);
 	    SceneManager.LoadScene(gameScene.Path);
     }
+
+    void UpdateUnlockButtonState(bool available) {
+	    if(!available) return;
+	    Debug.Log(available);
+	    bool isUnlocked = PlayerPrefs.GetInt("Unlocked" + current) == 1 || current < 4;
+	    if(!isUnlocked)
+			unlockButton.interactable = true;
+    }
+    
+    
+    
     
     public void Unlock(){
-	    
-	    //TODO: PLAY ADs
+	    AdsManager.Instance.rewardedAds.ShowRewardAd();
+	    AdsManager.Instance.rewardedAds.OnCompleteAds += UnlockCharacter;
+
+    }
+    void UnlockCharacter(){
+	    AdsManager.Instance.rewardedAds.OnCompleteAds -= UnlockCharacter;
+	    unlockButton.gameObject.SetActive(false);
 	    PlayerPrefs.SetInt("Unlocked" + current, 1);
 	    PlayerPrefs.SetInt("Player", current);
-		
-	    unlockButton.SetActive(false);
-	    
-    }
+	}
 }

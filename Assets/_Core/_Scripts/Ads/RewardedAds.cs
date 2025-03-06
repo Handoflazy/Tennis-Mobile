@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.Events;
 
 namespace _Core._Scripts.Ads
 {
@@ -8,6 +9,10 @@ namespace _Core._Scripts.Ads
         [SerializeField] private string androidAdUnitID;
         [SerializeField] private string iosAdUnitID;
         private string adUnitID;
+        
+        public UnityAction OnCompleteAds = delegate {  };
+        public Observer<bool> AdsAvailable = new(true);
+        
 
         private void Awake() {
 #if UNITY_IOS
@@ -24,12 +29,13 @@ namespace _Core._Scripts.Ads
         }
         public void ShowRewardAd() {
             Advertisement.Show(adUnitID, this);
+            AdsAvailable.Value = false;
             LoadRewardAd();
         }
 
         #region LoadCallBacks
         public void OnUnityAdsAdLoaded(string placementId) {
-            
+            AdsAvailable.Value = true;
         }
 
         public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message) {
@@ -52,8 +58,7 @@ namespace _Core._Scripts.Ads
         public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState) {
             if (adUnitID.Equals(placementId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
             {
-                Debug.Log("Unity Ads Rewarded Ad Completed");
-                // Grant a reward.
+                OnCompleteAds.Invoke();
             }
         }
         #endregion

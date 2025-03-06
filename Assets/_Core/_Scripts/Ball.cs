@@ -1,6 +1,3 @@
-
-using System;
-using _Core._Scripts;
 using DG.Tweening;
 using UnityEngine;
 using UnityServiceLocator;

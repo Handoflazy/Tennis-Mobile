@@ -1,6 +1,8 @@
 
+using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 //Destroy old instead new
@@ -39,10 +41,10 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
         instance = this as T;
     }
 
-    protected virtual void OnApplicatinQuit()
-    {
-        if(HasInstance)
-            Destroy(gameObject);
+    protected virtual void OnApplicationQuit() {
+        Debug.Log("OnApplicationQuit");
+        if (HasInstance)
+            instance = null;
     }
 }
 
@@ -52,7 +54,7 @@ public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
 {
     protected override void Awake()
     {
-        if (Instance != null)
+        if (HasInstance)
         {
             Destroy(gameObject);
             return;
@@ -65,19 +67,21 @@ public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
 
 public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
 {
-    public bool AutoUnparentOnAwake = default;
+     public bool AutoUnParentOnAwake = false;
     protected override void Awake()
     {
+        
         base.Awake();
         DontDestroyOnLoad(gameObject);
     }
 
     protected override void InitializingInstance()
     {
+       
         if (!Application.isPlaying) return;
-        if(AutoUnparentOnAwake)
+        if(AutoUnParentOnAwake)
             transform.SetParent(null);
-        if (!HasInstance)
+        if (!instance||instance != this)
         {
             instance = this as T;
         }
@@ -85,21 +89,27 @@ public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehavi
         {
             Destroy(gameObject);
         }
+        
+    }
+
+    protected override void OnApplicationQuit() {
+        base.OnApplicationQuit();
+        Debug.Log("Persisten end");
     }
 }
 
-public abstract class RegulatorSinglenton<T>:MonoBehaviour where T : Component
+public abstract class RegulatorSingleton<T>:MonoBehaviour where T : Component
 {
-    protected static T instance;
+    private static T instance;
     public float InitilizationTime { get; private set; }
     public static T Instance
     {
         get
         {
-            if (instance == null)
+            if (instance is null)
             {
                 instance =FindFirstObjectByType<T>();
-                if (instance == null)
+                if (instance is null)
                 {
                     var go = new GameObject(typeof(T).Name + "Auto Generated");
                     instance = go.AddComponent<T>();
@@ -124,13 +134,13 @@ public abstract class RegulatorSinglenton<T>:MonoBehaviour where T : Component
         T[] oldInstances = FindObjectsByType<T>(FindObjectsSortMode.None);
         foreach (T old in oldInstances)
         {
-            if(old.GetComponent<RegulatorSinglenton<T>>().InitilizationTime < InitilizationTime)
+            if(old.GetComponent<RegulatorSingleton<T>>().InitilizationTime < InitilizationTime)
                 Destroy(old.gameObject);
         }
         instance??=this as T;
     }
 
-    protected virtual void OnApplicatinQuit()
+    protected virtual void OnApplicationQuit()
     {
         if (HasInstance)
             Destroy(gameObject);

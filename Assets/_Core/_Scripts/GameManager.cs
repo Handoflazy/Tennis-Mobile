@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using _Core._Scripts.Ads;
 using DG.Tweening;
 using Eflatun.SceneReference;
 using Obvious.Soap;
@@ -57,17 +58,21 @@ public class GameManager : MonoBehaviour
 
     private CameraMovement cam;
     private AudioManager audioManager;
-    public GameEffectManager gameEffectManager;
-    public VisitorSpawner visitors;
+    private GameEffectManager gameEffectManager;
+    private VisitorSpawner visitors;
 
     private int playerPoints;
     private int opponentPoints;
     private bool resetting;
     private bool playerServe;
-    public int bonusDiamonds;
 
     private void Awake() {
         ServiceLocator.ForSceneOf(this).Register(this);
+        StartCoroutine(DisplayBannerWithDisplay());
+    }
+    private IEnumerator DisplayBannerWithDisplay(){
+        yield return new WaitForSeconds(2);
+        AdsManager.Instance.bannerAds.ShowBannerAds();
     }
 
     private void Start() {
@@ -96,6 +101,7 @@ public class GameManager : MonoBehaviour
         uiManager.HideStartPanel();
         uiManager.ToggleGamePanel(true);
         scoreUI.HideMatchLabel();
+        AdsManager.Instance.bannerAds.HideBannerAds();
     }
 
     public void Serve() {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Platformer;
 using Event_System.Utilities.EventChannel;
+using Platformer;
 using UnityEngine;
 
 namespace Utilities.Event_System
