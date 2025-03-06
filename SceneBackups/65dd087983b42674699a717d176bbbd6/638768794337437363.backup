@@ -9260,7 +9260,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1017080850
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10613,7 +10613,7 @@ MonoBehaviour:
   renderers: []
   winMat: {fileID: 2100000, guid: 098ec1d2abcbe41408962a38944e1c53, type: 2}
   loseMat: {fileID: 2100000, guid: c338314bd8fc5c34fa773976c928b6da, type: 2}
-  duration: 5
+  duration: 100
   characters:
   - {fileID: 324931770}
   - {fileID: 133011726}
@@ -10706,7 +10706,7 @@ MonoBehaviour:
   targets:
   - {fileID: 370059938}
   - {fileID: 1046422220}
-  - {fileID: 1680000943}
+  - {fileID: 1940432094}
   indicatorSpeed: 700
   revealDelay: 0.3
   tournamentPanelDuration: 3
@@ -11964,7 +11964,7 @@ GameObject:
   - component: {fileID: 1680000945}
   - component: {fileID: 1680000946}
   m_Layer: 5
-  m_Name: Top Finalist
+  m_Name: Bottom finalist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13053,7 +13053,7 @@ GameObject:
   - component: {fileID: 1940432096}
   - component: {fileID: 1940432097}
   m_Layer: 5
-  m_Name: Bottom Finalist
+  m_Name: Top finalist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -11,8 +11,6 @@ public class PowerUpBallSpawner : MonoBehaviour
             return;
 		    
         Vector3 position = transform.position + Vector3.right * Random.Range(-range, range);
-		    
-        Instantiate(powerUpPrefab, position, powerUpPrefab.transform.rotation)
-            .GetComponent<PowerUpBall>().SetSpawner(this);
+        Instantiate(powerUpPrefab, position, powerUpPrefab.transform.rotation);
     }
 }

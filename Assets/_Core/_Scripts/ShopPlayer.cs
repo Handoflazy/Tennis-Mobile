@@ -114,7 +114,6 @@ public class ShopPlayer : MonoBehaviour
     }
     
     public void Select(){
-	    Debug.Log(1);
 	    PlayerPrefs.SetInt("Player", current);
 	    SceneManager.LoadScene(gameScene.Path);
     }

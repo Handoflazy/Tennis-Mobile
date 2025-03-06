@@ -20,6 +20,7 @@ public struct ColorScheme
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private SceneReference winScene;
+    [SerializeField] private SceneReference playerShop;
     [SerializeField] private ScoreUIManager scoreUI;
     [SerializeField] private UIManager uiManager;
     [SerializeField] private BallFactory factory;
@@ -179,15 +180,13 @@ public class GameManager : MonoBehaviour
     }
 
     private IEnumerator Done(bool wonMatch) {
-        uiManager.ShowTransition();
+        uiManager.FadeOutTransition();
         CameraZoom.Raise();
 
         yield return new WaitForSeconds(0.25f);
 
         matchInfo.SetMatchInfo(wonMatch, playerPoints + " - " + opponentPoints);
-        yield return new WaitForSeconds(1f);
-
-        SceneManager.LoadScene(winScene.Path);
+        StartCoroutine(LoadNewScene(winScene));
     }
 
     private IEnumerator OpponentServe() {
@@ -219,19 +218,30 @@ public class GameManager : MonoBehaviour
 
     [Button("Reset")]
     public void ResetGame() {
-        PlayerPrefs.SetInt(SaveConst.TOURNAMENT, 0);
-        PlayerPrefs.SetInt(SaveConst.MATCH, 0);
-        PlayerPrefs.SetInt(SaveConst.TOURNAMENT_MATCH_NUMBER, 0);
-        SceneManager.LoadScene(winScene.Path);
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+    
     [Button("Win Match")]
     public void WinMatch() {
         matchInfo.SetMatchInfo(true, "3-2");
-        SceneManager.LoadScene(winScene.Path);
+        StartCoroutine(LoadNewScene(winScene));
     }
 
     private void OnDestroy() {
         DOTween.KillAll();
+    }
+    public void Home(){
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void CharacterSelection(){
+        StartCoroutine(LoadNewScene(playerShop));
+    }
+    IEnumerator LoadNewScene(SceneReference scene){
+        uiManager.FadeInTransition();
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(scene.Path);
     }
 }

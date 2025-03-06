@@ -1659,23 +1659,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cb8282c41dd4a01827478530d37cb5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outfit: {fileID: 11400000, guid: 4ea251bea0d32774da85c55e8f68d35c, type: 2}
+  outfit: {fileID: 11400000, guid: 19ca561b439e2c6409d5ef80815c0787, type: 2}
   character: {fileID: 3698379740984581224}
   racket: {fileID: 8987557250846128677}
   hatRenderers:
-  - {fileID: 3698379741476576424}
-  - {fileID: 3698379741508161796}
   - {fileID: 5211351250067105767}
+  - {fileID: 3698379741508161796}
+  - {fileID: 3698379741476576424}
   - {fileID: 3698379742193682576}
   - {fileID: 3698379741107074050}
   glasses: {fileID: 3698379741256034415}
   hats:
   - {fileID: 7007735260411165086}
   - {fileID: 3698379741508161818}
-  - {fileID: 3698379741107074048}
   - {fileID: 3698379741476576430}
   - {fileID: 3698379742193682582}
-  hair: []
+  - {fileID: 3698379741107074048}
+  hair:
+  - {fileID: 3698379741962936590}
+  - {fileID: 3698379741962936588}
   skirt: {fileID: 3698379741962936586}
   rendererPantsIndex: 0
   rendererShirtIndex: 1
@@ -1735,10 +1737,10 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1dc5509e96be44f4a8074cea336cde72, type: 2}
-  - {fileID: 2100000, guid: 0a21c1a12d26e8a4d9a6baf450657482, type: 2}
-  - {fileID: 2100000, guid: 7f960a77b928de046b54c58ca5e515af, type: 2}
-  - {fileID: 2100000, guid: ce4991a81bcbf8045821e77eb97ef2ed, type: 2}
+  - {fileID: 2100000, guid: d2420d90a97bc3646843580a8f4f7174, type: 2}
+  - {fileID: 2100000, guid: ba42e6f77a2cabe45a227bf211d2d2c3, type: 2}
+  - {fileID: 2100000, guid: d2420d90a97bc3646843580a8f4f7174, type: 2}
+  - {fileID: 2100000, guid: 2dae2df46d0c6ab4783b7322aa5ba9c0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2129,7 +2131,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3698379741107074049
 Transform:
   m_ObjectHideFlags: 0
@@ -2340,7 +2342,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f6a617c66818d6548853c7b105072447, type: 2}
+  - {fileID: 2100000, guid: 2bee885fb08e2fa4db5e0571bd377b71, type: 2}
   - {fileID: 4580896137698104710, guid: 105afa31a383ca74dbcf752aedb2fd3d, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -2590,7 +2592,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100002, guid: a2061ef3dfe4e6c43bd4f40719cefd0b, type: 3}
+  - {fileID: 2100000, guid: f6a617c66818d6548853c7b105072447, type: 2}
   - {fileID: 2100004, guid: a2061ef3dfe4e6c43bd4f40719cefd0b, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -2674,7 +2676,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100002, guid: a2061ef3dfe4e6c43bd4f40719cefd0b, type: 3}
+  - {fileID: 2100000, guid: f6a617c66818d6548853c7b105072447, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8785,7 +8787,7 @@ PrefabInstance:
     - target: {fileID: 8365164003783349154, guid: 8c65ffe803b92504484b9d793fdd279b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 2bee885fb08e2fa4db5e0571bd377b71, type: 2}
+      objectReference: {fileID: 2100000, guid: 4e153bb942c5de24f968865cd336d3af, type: 2}
     - target: {fileID: 8365164003783349156, guid: 8c65ffe803b92504484b9d793fdd279b, type: 3}
       propertyPath: m_RootOrder
       value: 0

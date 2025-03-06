@@ -98,9 +98,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowTransition()
+    public void FadeOutTransition()
     {
         transition.SetTrigger(AnimConst.TRANSITION_PARAM);
+    }
+    public void FadeInTransition()
+    {
+        transition.Play("Fade in");
     }
 
     public void HideStartPanel()

@@ -1,16 +1,12 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class PowerUpBall : MonoBehaviour
 {
-    public PowerUpBallSpawner spawner;
-    private Player player;
+    [SerializeField] private PlayerVariable player;
 
     private void Start() {
-        player = FindObjectOfType<Player>();
-    }
-
-    public void SetSpawner(PowerUpBallSpawner spawner){
-        this.spawner = spawner;
+        transform.DOScale(40f, 1f).SetLoops(-1, LoopType.Restart);
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -18,9 +14,12 @@ public class PowerUpBall : MonoBehaviour
 		
         if(ball == null || !ball.GetLastHit())
             return;
-        player.ComboDone(ball);
-        spawner.RandomSpawn();
+        player.Value.ComboDone(ball);
 		
         Destroy(gameObject);   
+    }
+
+    private void OnDestroy() {
+        transform.DOKill();
     }
 }
