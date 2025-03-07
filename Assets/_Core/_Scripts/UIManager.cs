@@ -3,7 +3,6 @@ using System.Collections;
 using _Core._Scripts;
 using _Core._Scripts.Utilities.Extensions;
 using DG.Tweening;
-using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,49 +11,42 @@ using Utilities.Extensions;
 
 public class UIManager : MonoBehaviour
 {
-    [FoldoutGroup("Start Screen"), SerializeField, Required]
+    [SerializeField]
     private CanvasGroup startPanelCanvasGroup;
 
-    [FoldoutGroup("Start Screen"), SerializeField, Required]
+    [SerializeField]
     private GameObject availableIcon;
 
-    [FoldoutGroup("Game Panel"), SerializeField, Required]
+    [SerializeField]
     private GameObject gamePanel;
 
-    [FoldoutGroup("Game Panel"), SerializeField, Required]
+    [SerializeField]
     private Animator swipeLabel;
 
-    [FoldoutGroup("Game Panel"), SerializeField, Required]
+    [SerializeField]
     private Animator countdownServe;
 
-    [FoldoutGroup("Game Panel"), SerializeField, Required]
+    [SerializeField]
     private GameObject scoreMatchPanel;
 
     [SerializeField] private Animator transition;
 
-    [FoldoutGroup("Pause Panel"), SerializeField, Required]
+    [SerializeField]
     private GameObject audioLine;
 
-    [FoldoutGroup("Pause Panel"), SerializeField, Required]
+    [SerializeField]
     private GameObject vibrateLine;
 
-    [FoldoutGroup("Pause Panel"), SerializeField, Required]
+    [SerializeField]
     private Animator pausePanel;
-
-    [Header("Bonus scene only")]
-    public Animator bonuspopup;
-    public TextMeshProUGUI bonuspopupLabel;
-    public TextMeshProUGUI diamondsLabel;
-    public Animator diamondLabelAnim;
-
     private bool useHapticFeedback; //TODO: Implement haptic feedback, make with ScriptableVariable
 
-    private const float AvailableIconScale = 1.5f;
-    private const float AvailableIconDuration = 0.4f;
-    private const float StartPanelFadeDuration = 0.25f;
-    private const float ScoreMatchPanelScaleDuration = 1f;
-    private const float ScoreMatchPanelHideDuration = 0.8f;
-    private const float FreezeWaitTime = 1f / 3f;
+    private const float AVAILABLE_ICON_SCALE = 1.5f;
+    private const float AVAILABLE_ICON_DURATION = 0.4f;
+    private const float START_PANEL_FADE_DURATION = 0.25f;
+    private const float SCORE_MATCH_PANEL_SCALE_DURATION = 1f;
+    private const float SCORE_MATCH_PANEL_HIDE_DURATION = 0.8f;
+    private const float FREEZE_WAIT_TIME = 1f / 3f;
 
     private void Awake()
     {
@@ -71,7 +63,7 @@ public class UIManager : MonoBehaviour
 
     private void AnimateAvailableIcon()
     {
-        availableIcon.transform.DOScale(AvailableIconScale, AvailableIconDuration).SetLoops(-1, LoopType.Yoyo);
+        availableIcon.transform.DOScale(AVAILABLE_ICON_SCALE, AVAILABLE_ICON_DURATION).SetLoops(-1, LoopType.Yoyo);
     }
 
     public void SetAudio(bool change)
@@ -85,19 +77,6 @@ public class UIManager : MonoBehaviour
         audioLine.SetActive(audio == 1);
         AudioListener.volume = audio == 0 ? 1 : 0;
     }
-
-    public void ToggleBonus(bool value)
-    {
-        if (value)
-        {
-            diamondsLabel.gameObject.SetActive(false);
-        }
-        else
-        {
-            availableIcon.SetActive(PlayerPrefs.GetInt("Diamonds") >= 20);
-        }
-    }
-
     public void FadeOutTransition()
     {
         transition.SetTrigger(AnimConst.TRANSITION_PARAM);
@@ -109,7 +88,7 @@ public class UIManager : MonoBehaviour
 
     public void HideStartPanel()
     {
-        startPanelCanvasGroup.DOFade(0, StartPanelFadeDuration).OnComplete(() => startPanelCanvasGroup.gameObject.SetActive(false));
+        startPanelCanvasGroup.DOFade(0, START_PANEL_FADE_DURATION).OnComplete(() => startPanelCanvasGroup.gameObject.SetActive(false));
     }
 
     public void ToggleGamePanel(bool value)
@@ -127,8 +106,8 @@ public class UIManager : MonoBehaviour
     {
         scoreMatchPanel.SetActive(true);
         scoreMatchPanel.transform.localScale = Vector3.one.With(y: 0);
-        yield return scoreMatchPanel.transform.DOScaleY(1, ScoreMatchPanelScaleDuration).SetEase(Ease.OutBack)
-            .OnComplete(() => scoreMatchPanel.transform.DOScaleY(0, ScoreMatchPanelHideDuration).SetEase(Ease.InBack))
+        yield return scoreMatchPanel.transform.DOScaleY(1, SCORE_MATCH_PANEL_SCALE_DURATION).SetEase(Ease.OutBack)
+            .OnComplete(() => scoreMatchPanel.transform.DOScaleY(0, SCORE_MATCH_PANEL_HIDE_DURATION).SetEase(Ease.InBack))
             .WaitForCompletion();
         scoreMatchPanel.gameObject.SetActive(false);
     }
@@ -145,7 +124,7 @@ public class UIManager : MonoBehaviour
     {
         if (freeze)
         {
-            yield return new WaitForSeconds(FreezeWaitTime);
+            yield return new WaitForSeconds(FREEZE_WAIT_TIME);
             Time.timeScale = 0;
         }
         else

@@ -1,5 +1,4 @@
 using System.Collections;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -11,8 +10,6 @@ namespace Platformer.Common
         public VisualEffect visualEffect;
         public float DissolveRate = 0.0125f;
         public float refreshRate = 0.025f;
-        
-        [Button("Test")]
         public void Dissolve() {
             visualEffect?.Play();
             foreach (var skin in skinnedMeshes)

@@ -4,7 +4,6 @@ using _Core._Scripts.Ads;
 using DG.Tweening;
 using Eflatun.SceneReference;
 using Obvious.Soap;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityServiceLocator;
@@ -43,17 +42,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform opponentSpawnPos;
     [SerializeField] private Transform scoreCamTarget;
 
-    [FoldoutGroup("Stadium"), SerializeField]
-    private ColorScheme[] colorSchemes;
+    [Header("Stadium")]
+    [SerializeField] private ColorScheme[] colorSchemes;
 
-    [FoldoutGroup("Stadium"), SerializeField]
-    private Material floor;
+    [SerializeField] private Material floor;
 
-    [FoldoutGroup("Stadium"), SerializeField]
-    private Material stadium;
+    [SerializeField] private Material stadium;
 
-    [FoldoutGroup("Stadium"), SerializeField]
-    private Material court;
+    [SerializeField] private Material court;
 
 
     private CameraMovement cam;
@@ -221,15 +217,13 @@ public class GameManager : MonoBehaviour
     public void Out() {
         LosePoint();
     }
-
-    [Button("Reset")]
+    
     public void ResetGame() {
         PlayerPrefs.DeleteAll();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     
-    [Button("Win Match")]
     public void WinMatch() {
         matchInfo.SetMatchInfo(true, "3-2");
         StartCoroutine(LoadNewScene(winScene));

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class UIScaleElement : MonoBehaviour
@@ -21,7 +18,7 @@ public class UIScaleElement : MonoBehaviour
     [SerializeField]
     private bool playConstantly = false;
     
-    [DisableIf("playConstantly")][SerializeField]
+    [SerializeField]
     private int loopTime = 2;
 
     [SerializeField]

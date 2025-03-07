@@ -1,24 +1,40 @@
-using System;
-using System.ComponentModel.Design;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "New Player Data",menuName = "Data/PlayerData")]
 public class CharacterData : DescriptionBaseSO //TODO: Make it  to be ServiceLocator
 {
-    [BoxGroup("Locomotion Settings"),SerializeField] float speed;
-    [BoxGroup("Locomotion Settings"),SerializeField] float turnSpeed;
-    [BoxGroup("Locomotion Settings"),SerializeField] float moveRange;
-    
-    [BoxGroup("Ball Settings"),SerializeField] float ballMoveSpeed;
-    [BoxGroup("Ball Settings"),SerializeField] float ballRange;
-    [BoxGroup("Ball Settings"),SerializeField] float force;
-    [BoxGroup("Ball Settings"),SerializeField] float upForce;
-    
-    [FormerlySerializedAs("powerbarSpeedMin")] [BoxGroup("Power bar Settings"),SerializeField] float powerBarSpeedMin;
-    [FormerlySerializedAs("powerbarSpeedMax")] [BoxGroup("Power bar Settings"),SerializeField] float powerBarSpeedMax;
-    [BoxGroup("Power bar Settings"),SerializeField] float powerBarMaxSlowdown;
+    [Header("Locomotion Settings")]
+    [SerializeField]
+    float speed;
+
+    [SerializeField]
+    float turnSpeed;
+
+    [SerializeField]
+    float moveRange;
+
+    [Header("Ball Settings")][ SerializeField]
+    float ballMoveSpeed;
+
+   [SerializeField]
+    float ballRange;
+
+    [SerializeField]
+    float force;
+
+    [SerializeField]
+    float upForce;
+
+    [Header("Power bar Settings")]
+    [SerializeField]
+    float powerBarSpeedMin;
+
+    [SerializeField]
+    float powerBarSpeedMax;
+
+    [SerializeField]
+    float powerBarMaxSlowdown;
     
     [SerializeField] private float maxDragTime;
     [SerializeField] private float dragDistance;

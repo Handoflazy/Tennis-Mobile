@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
 using System.Threading.Tasks;
-using _Core._Scripts;
 using Obvious.Soap;
-using Sirenix.OdinInspector;
-using TMPro;
 using UnityEngine;
 using UnityServiceLocator;
 using Utilities.Extensions;
@@ -13,11 +9,12 @@ using Random = UnityEngine.Random;
 
 public class Player : MonoBehaviour
 {
-    [FoldoutGroup("Elements"), SerializeField] private CharacterData data;
-    [FoldoutGroup("Elements"), SerializeField] private SoundPlayer soundPlayer;
-    [FoldoutGroup("Elements"), SerializeField] private AnimationController anim;
-    [FoldoutGroup("Elements"), SerializeField] private BallSensor sensor;
-    [FoldoutGroup("Elements"), SerializeField] private PlayerUI playerUI;
+    [Header("Elements")]
+    [SerializeField] private CharacterData data;
+    [SerializeField]  private SoundPlayer soundPlayer;
+    [SerializeField]  private AnimationController anim;
+    [SerializeField]  private BallSensor sensor;
+    [SerializeField]  private PlayerUI playerUI;
 
     [Space(10)]
     [Header("SOAP")]
@@ -30,7 +27,7 @@ public class Player : MonoBehaviour
     private Vector3 targetPosition;
     private Vector3 startPos;
 
-    [ShowInInspector] private bool serveShot;
+    private bool serveShot;
     private bool shoot = true;
     private bool canShoot;
     private bool right;
@@ -41,10 +38,10 @@ public class Player : MonoBehaviour
     private GameManager gameManager;
     private CameraMovement cam;
 
-    private const float ServeAnimWaitTime = 0.28f;
-    private const float DisableShootingWaitTime = 0.7f;
-    private const float ShakeDuration = 0.12f;
-    private const float ShakeMagnitude = 0.5f;
+    private const float SERVE_ANIM_WAIT_TIME = 0.28f;
+    private const float DISABLE_SHOOTING_WAIT_TIME = 0.7f;
+    private const float SHAKE_DURATION = 0.12f;
+    private const float SHAKE_MAGNITUDE = 0.5f;
 
     private void Awake() {
         comboNumber = new Observer<int>(0);
@@ -154,13 +151,13 @@ public class Player : MonoBehaviour
         ball.Value.Velocity = direction * data.Force + Vector3.up * data.UpForce;
         soundPlayer.PlayHitBallSound();
         ball.Value.Frozen(false);
-        StartCoroutine(cam.Shake(ShakeDuration, ShakeMagnitude));
+        StartCoroutine(cam.Shake(SHAKE_DURATION, SHAKE_MAGNITUDE));
     }
 
     private IEnumerator ServeAnim(Vector3 direction, bool powerShot)
     {
         anim.PlayAnimation(powerShot ? AnimConst.POWER_SERVE_STATE : AnimConst.SERVE_STATE);
-        yield return new WaitForSeconds(ServeAnimWaitTime);
+        yield return new WaitForSeconds(SERVE_ANIM_WAIT_TIME);
         float barForce = data.Force * 0.8f + (data.Force * indicatorValue * 0.3f);
         ball.Value.Velocity = direction * barForce + Vector3.up * data.UpForce;
         playerUI.ShowText(indicatorValue);
@@ -168,13 +165,13 @@ public class Player : MonoBehaviour
 
         soundPlayer.PlayHitBallSound();
         ball.Value.Frozen(false);
-        StartCoroutine(cam.Shake(ShakeDuration, ShakeMagnitude));
+        StartCoroutine(cam.Shake(SHAKE_DURATION, SHAKE_MAGNITUDE));
     }
 
     private IEnumerator DisableShooting()
     {
         shoot = false;
-        yield return new WaitForSeconds(DisableShootingWaitTime);
+        yield return new WaitForSeconds(DISABLE_SHOOTING_WAIT_TIME);
         shoot = true;
     }
 

@@ -1,11 +1,10 @@
-﻿using System;
-using Sirenix.OdinInspector;
+﻿
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class RandomPitch : MonoBehaviour
 {
-    [MinMaxSlider(-3,3)]
+    [Tooltip("The range of pitch values to randomize between.")]
     [SerializeField] Vector2 value;
 
     private AudioSource source;

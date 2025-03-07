@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using _Core._Scripts;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityServiceLocator;
 
@@ -10,45 +9,33 @@ public class VisitorSpawner : MonoBehaviour
     [SerializeField] VisitorFactory visitorFactory;
     [SerializeField] Transform[] rows;
 
+    [Header("Settings")]
+    [SerializeField] int numRow;
 
-    [FoldoutGroup("Settings"), SerializeField]
-    int numRow;
-
-    [FoldoutGroup("Settings"), SerializeField]
+    [SerializeField]
     float space;
 
-    [FoldoutGroup("Settings"), SerializeField]
-    float randomPos;
+    [SerializeField] float randomPos;
 
-    [FoldoutGroup("Settings"), SerializeField]
-    Vector3 rotation;
+    [SerializeField] Vector3 rotation;
 
-    [FoldoutGroup("Settings"), SerializeField]
-    float kidSize;
+    [SerializeField] float kidSize;
 
-    [FoldoutGroup("Settings"), SerializeField]
-    int visitorChanceMin;
+    [SerializeField] int visitorChanceMin;
 
-    [FoldoutGroup("Settings"), SerializeField]
-    int visitorChanceMax;
+    [SerializeField] int visitorChanceMax;
 
-    [FoldoutGroup("Settings"), SerializeField]
-    float kidOffset;
+    [SerializeField] float kidOffset;
+    [Header("Appearance")]
+    [SerializeField] Material[] pants;
 
-    [FoldoutGroup("Appearance"), SerializeField]
-    Material[] pants;
+    [SerializeField] Material[] shirts;
 
-    [FoldoutGroup("Appearance"), SerializeField]
-    Material[] shirts;
+    [SerializeField] Material[] skinTones;
 
-    [FoldoutGroup("Appearance"), SerializeField]
-    Material[] skinTones;
+    [SerializeField] Material[] shoes;
 
-    [FoldoutGroup("Appearance"), SerializeField]
-    Material[] shoes;
-
-    [FoldoutGroup("Appearance"), SerializeField]
-    Material[] hats;
+    [SerializeField] Material[] hats;
 
 
     int visitorChance;

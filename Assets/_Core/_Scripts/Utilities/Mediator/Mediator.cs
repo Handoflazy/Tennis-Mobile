@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Platformer.Utilities.Visitors;
-using Sirenix.Utilities;
 using UnityEngine;
 
 namespace Platformer.Utilities.Mediator
@@ -25,8 +24,10 @@ namespace Platformer.Utilities.Mediator
             entities.FirstOrDefault(entity => entity.Equals(target))?.Accept(message);
         }
         public void Broadcast(T source, IVisitor message, Func<T, bool> predicate = null) {
-            entities.Where(target => source !=target&&SenderConditionMet(target,predicate)&&MediatorConditionMet(target))
-                .ForEach(target => target.Accept(message));
+            foreach (var target in entities.Where(target => source != target && SenderConditionMet(target, predicate) && MediatorConditionMet(target)))
+            {
+                target.Accept(message);
+            }
         }
         bool SenderConditionMet(T target, Func<T, bool>predicate) {
             return predicate == null || predicate(target);

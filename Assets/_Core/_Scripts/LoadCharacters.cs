@@ -1,26 +1,18 @@
-using _Core._Scripts;
-using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityServiceLocator;
 
 public class LoadCharacters : MonoBehaviour
 {
-    public Transform playerPosition;
-    public Transform opponentPosition;
-    
-    public Animator comboLabel;
-	public TextMeshProUGUI comboNumberLabel;
-	public Animator swipeLabel;
-	public GameObject scoreTexts;
-	public GameObject matchLabel;
-	public bool playerOnly;
+	[SerializeField]  Transform playerPosition;
+	[SerializeField]  Transform opponentPosition;
+	[SerializeField]  bool playerOnly;
     
 	[SerializeField] PlayerVariable player;
 	[SerializeField] OpponentVariable opponent;
 	
-	[SerializeField,Required] Player playerPrefab;
-	[SerializeField,Required] Opponent opponentPrefab;
+	[SerializeField] Player playerPrefab;
+	[SerializeField] Opponent opponentPrefab;
 	
 
 	private void Start() {

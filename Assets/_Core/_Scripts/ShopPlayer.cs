@@ -1,7 +1,6 @@
 using System;
 using _Core._Scripts.Ads;
 using Eflatun.SceneReference;
-using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,7 +14,7 @@ public class ShopPlayer : MonoBehaviour
 {
 	[Header("Elements")] 
 	[SerializeField] private SceneReference gameScene;
-	[SerializeField,Required] GameObject playerPrefab;
+	[SerializeField] GameObject playerPrefab;
 	[SerializeField] Character[] characters;
 	[SerializeField] RuntimeAnimatorController idle;
 	[SerializeField] TextMeshProUGUI nameLabel;

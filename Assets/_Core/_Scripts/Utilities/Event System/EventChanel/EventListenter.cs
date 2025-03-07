@@ -1,5 +1,3 @@
-using System;
-using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +9,6 @@ namespace Utilities.EventChannel
         [SerializeField] private UnityEvent<T> unityEvent;
         
         public bool DebugLog = false;
-        [EnableIf("DebugLog")]
         [SerializeField] private string debugLogMessage;
         private void Awake()
         {
