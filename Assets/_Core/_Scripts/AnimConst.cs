@@ -37,6 +37,11 @@ public static class SaveConst
     public const string OPPONENT_1 = "Opponent 1";
     public const string OPPONENT_2 = "Opponent 2";
     public const string OPPONENT_3 = "Opponent 3";
+
+    public const string DIAMONDS = "Diamonds";
+    public const string PLAYER = "Player";
+    public const string UNLOCKED = "Unlocked";
+    
     //public const string MIDDLE_LAYER_PLAYER_OPPONENT = "Middle Layer Player Opponent";
     
     

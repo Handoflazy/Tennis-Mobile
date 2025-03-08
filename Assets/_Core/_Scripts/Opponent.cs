@@ -1,7 +1,6 @@
 using System.Collections;
 using _Core._Scripts.Utilities.Extensions;
 using UnityEngine;
-using UnityServiceLocator;
 using Utilities.Extensions;
 using Random = UnityEngine.Random;
 
@@ -32,11 +31,11 @@ public class Opponent : MonoBehaviour
     private float lastDist;
     private float rotation;
 
-    private const float MoveThreshold = 0.05f;
-    private const float HitWaitTime = 1f;
-    private const float MaxXDistance = 1.3f;
-    private const float RotationRight = 91f;
-    private const float RotationLeft = -90f;
+    private const float MOVE_THRESHOLD = 0.1f;
+    private const float HIT_WAIT_TIME = 1f;
+    private const float MAX_X_DISTANCE = 1.3f;
+    private const float ROTATION_RIGHT = 91f;
+    private const float ROTATION_LEFT = -90f;
     private void Start()
     {
         lookAt = player.Value.transform;
@@ -60,7 +59,7 @@ public class Opponent : MonoBehaviour
         if (target == Vector3.zero) return;
 
         float dist = Vector3.Distance(transform.position, target);
-        moving = dist > MoveThreshold;
+        moving = dist > MOVE_THRESHOLD;
         
         if (moving)
         {
@@ -90,7 +89,7 @@ public class Opponent : MonoBehaviour
             if (moveParticles.isPlaying) moveParticles.Stop();
         }
         else {
-            rotation = right ? RotationRight : RotationLeft;
+            rotation = right ? ROTATION_RIGHT : ROTATION_LEFT;
             if (!moveParticles.isPlaying) moveParticles.Play();
         }
 
@@ -103,9 +102,8 @@ public class Opponent : MonoBehaviour
 
     private void UpdateAnimator()
     {
-        if (!anim.IsAnimationPlaying(AnimConst.SERVE_STATE) && anim.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.6f)
-        {
-            anim.PlayAnimation(moving ? (right ? AnimConst.RUN_RIGHT_STATE : AnimConst.RUN_LEFT_STATE) : AnimConst.IDLE_STATE);
+        if(!anim.IsAnimationPlaying(AnimConst.HIT_RIGHT_STATE)&&!anim.IsAnimationPlaying(AnimConst.SERVE_STATE)&&!anim.IsAnimationPlaying(AnimConst.POWER_SERVE_STATE)) {
+            anim.PlayAnimation(moving ? (right ? AnimConst.RUN_RIGHT_STATE : AnimConst.RUN_LEFT_STATE) : AnimConst.IDLE_STATE, 0.125f);
         }
     }
 
@@ -113,11 +111,11 @@ public class Opponent : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.CompareTag("Ball") || ball.Value.inactive || justHit) return;
+        if (!other.gameObject.CompareTag("Ball") || other.GetComponent<Ball>().IsInactive || justHit) return;
 
         float xDistance = Mathf.Abs(transform.position.x - other.gameObject.transform.position.x);
 
-        if (xDistance > MaxXDistance)
+        if (xDistance > MAX_X_DISTANCE)
         {
             if (Random.Range(0, 2) == 0)
                 anim.PlayAnimation(AnimConst.HIT_RIGHT_STATE);
@@ -149,7 +147,7 @@ public class Opponent : MonoBehaviour
     public IEnumerator JustHit()
     {
         justHit = true;
-        yield return new WaitForSeconds(HitWaitTime);
+        yield return new WaitForSeconds(HIT_WAIT_TIME);
         justHit = false;
     }
 

@@ -50,20 +50,26 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        
         ServiceLocator.ForSceneOf(this).Register(this);
     }
 
     private void Start()
     {
+        
         AnimateAvailableIcon();
         pausePanel.gameObject.SetActive(false);
         scoreMatchPanel.SetActive(false);
         SetAudio(false);
     }
 
-    private void AnimateAvailableIcon()
-    {
-        availableIcon.transform.DOScale(AVAILABLE_ICON_SCALE, AVAILABLE_ICON_DURATION).SetLoops(-1, LoopType.Yoyo);
+    private void AnimateAvailableIcon() {
+        if(PlayerPrefs.GetInt(SaveConst.DIAMONDS,0) >= 20) {
+            availableIcon.SetActive(true);
+            availableIcon.transform.DOScale(AVAILABLE_ICON_SCALE, AVAILABLE_ICON_DURATION).SetLoops(-1, LoopType.Yoyo);
+        } else {
+            availableIcon.SetActive(false);
+        }
     }
 
     public void SetAudio(bool change)

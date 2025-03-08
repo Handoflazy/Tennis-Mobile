@@ -254,6 +254,8 @@ public class DanceScene : MonoBehaviour
 		mainPanel.DOFade(0,.3f);
 		
 		if(!wonTournament){
+			PlayerPrefs.SetInt(SaveConst.DIAMONDS, PlayerPrefs.GetInt(SaveConst.DIAMONDS) +4);
+			
 			StartCoroutine(AssignTextures(PlayerPrefs.GetInt(SaveConst.TOURNAMENT_MATCH_NUMBER) - 1));
 			
 			yield return new WaitForSeconds(revealDelay * 5f);
@@ -261,6 +263,7 @@ public class DanceScene : MonoBehaviour
 			moveIndicator = true;
 		}
 		else{
+			PlayerPrefs.SetInt(SaveConst.DIAMONDS, PlayerPrefs.GetInt(SaveConst.DIAMONDS) +12);
 			tournamentGroup.alpha = 0;
 			cupGroup.alpha = 1;
 			nextButton.SetActive(true);

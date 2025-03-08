@@ -9,6 +9,7 @@ using UnityEngine.UI;
 [Serializable]
 public class Character{
     public string name;
+    public int price;
 }
 public class ShopPlayer : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class ShopPlayer : MonoBehaviour
 	[SerializeField] RuntimeAnimatorController idle;
 	[SerializeField] TextMeshProUGUI nameLabel;
 	[SerializeField] Transform cameraHolder;
+	[SerializeField] TextMeshProUGUI diamondText;
 	[Header("Settings")]
 	[SerializeField] float dist;
 	[SerializeField] float maxDragTime;
@@ -28,6 +30,7 @@ public class ShopPlayer : MonoBehaviour
 	[SerializeField] Button rightButton;
 	[SerializeField] Button leftButton;
 	[SerializeField] Button unlockButton;
+	[SerializeField] private Button adButton;
 	
     float startPos;
     float startTime;
@@ -41,11 +44,15 @@ public class ShopPlayer : MonoBehaviour
     int mannequinCount;
 
     private void Awake() {
-	    AdsManager.Instance.rewardedAds.AdsAvailable.AddListener(UpdateUnlockButtonState);;
+	    AdsManager.Instance.rewardedAds.AdsAvailable.AddListener(UpdateUnlockADState);;
+	    AdsManager.Instance.rewardedAds.OnCompleteAds += ()=> {
+		    PlayerPrefs.SetInt(SaveConst.DIAMONDS, PlayerPrefs.GetInt(SaveConst.DIAMONDS) + 10);
+		    UpdateDiamondText();
+	    };
     }
 
     private void OnDisable() {
-	    AdsManager.Instance.rewardedAds.AdsAvailable.RemoveListener(UpdateUnlockButtonState);
+	    AdsManager.Instance.rewardedAds.AdsAvailable.RemoveListener(UpdateUnlockADState);
     }
 
     private void Start() {
@@ -75,11 +82,14 @@ public class ShopPlayer : MonoBehaviour
 			
 		    pos += Vector3.right * dist;
 	    }
-	    current = PlayerPrefs.GetInt("Player");
+	    current = PlayerPrefs.GetInt(SaveConst.PLAYER);
 	    UpdateCamera();
 	    cameraHolder.position = Vector3.right * (dist * current);
-	    
+	    UpdateDiamondText();
     }
+    void UpdateDiamondText(){
+	    diamondText.text = PlayerPrefs.GetInt(SaveConst.DIAMONDS).ToString();
+	}
     void Update(){
 	    //move camera to currently selected character
 	    cameraHolder.position = Vector3.MoveTowards(cameraHolder.position, camTarget, Time.deltaTime * transitionSpeed);
@@ -117,44 +127,41 @@ public class ShopPlayer : MonoBehaviour
 	    if(current < characters.Length)
 		    nameLabel.text = characters[current].name;
 		
-	    bool unlocked = PlayerPrefs.GetInt("Unlocked" + current) == 1 || current < 4;
+	    bool unlocked = PlayerPrefs.GetInt(SaveConst.UNLOCKED + current) == 1 || current < 4;
 
 	    
 	    unlockButton.gameObject.SetActive(!unlocked);
-	    if(!unlocked&&AdsManager.Instance.rewardedAds.AdsAvailable.Value) {
-		    unlockButton.interactable = true;
-	    } else {
-		    unlockButton.interactable = false;
-	    }
 	    leftButton.interactable = (current > 0);
 	    rightButton.interactable =  (current < mannequinCount - 1);
     }
     
     public void Select(){
-	    PlayerPrefs.SetInt("Player", current);
+	    PlayerPrefs.SetInt(SaveConst.PLAYER, current);
 	    SceneManager.LoadScene(gameScene.Path);
     }
 
-    void UpdateUnlockButtonState(bool available) {
+    void UpdateUnlockADState(bool available) {
 	    if(!available) return;
-	    Debug.Log(available);
-	    bool isUnlocked = PlayerPrefs.GetInt("Unlocked" + current) == 1 || current < 4;
-	    if(!isUnlocked)
-			unlockButton.interactable = true;
+	    adButton.gameObject.SetActive(true);
     }
+    public void WatchAd() {
+	    if(!AdsManager.Instance.rewardedAds.AdsAvailable.Value) return;
+	    AdsManager.Instance.rewardedAds.ShowRewardAd();
+	    adButton.gameObject.SetActive(false);
+    }
+    
+ 
     
     
     
     
     public void Unlock(){
-	    AdsManager.Instance.rewardedAds.ShowRewardAd();
-	    AdsManager.Instance.rewardedAds.OnCompleteAds += UnlockCharacter;
-
-    }
-    void UnlockCharacter(){
-	    AdsManager.Instance.rewardedAds.OnCompleteAds -= UnlockCharacter;
+	    if(PlayerPrefs.GetInt(SaveConst.DIAMONDS) < characters[current].price)
+			return;
+	    PlayerPrefs.SetInt(SaveConst.DIAMONDS, PlayerPrefs.GetInt(SaveConst.DIAMONDS) - characters[current].price);
+	    PlayerPrefs.SetInt(SaveConst.UNLOCKED + current, 1);
+	    PlayerPrefs.SetInt(SaveConst.PLAYER, current);
 	    unlockButton.gameObject.SetActive(false);
-	    PlayerPrefs.SetInt("Unlocked" + current, 1);
-	    PlayerPrefs.SetInt("Player", current);
-	}
+	    UpdateDiamondText();
+    }
 }

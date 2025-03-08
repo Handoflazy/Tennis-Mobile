@@ -12,11 +12,11 @@ public class Ball : MonoBehaviour
     [SerializeField] private GameObject flames;
     [Header("Prefabs")]
     [SerializeField] private Material flameMat;
-    
-    public bool inactive;
     private bool playerHit;
     private GameManager gameManager;
     private GameEffectManager gameEffectManager;
+
+    public bool IsInactive;
     
     Vector3 lastVelocity;
     
@@ -28,6 +28,7 @@ public class Ball : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
+        Debug.Log(1);
         if(gameEffectManager == null)
             ServiceLocator.ForSceneOf(this).Get(out gameEffectManager);
         if(!other.gameObject.CompareTag("Ground"))
@@ -37,7 +38,7 @@ public class Ball : MonoBehaviour
             gameManager.FireBall();
             Destroy(gameObject);
         }
-        if(inactive)
+        if(IsInactive)
             return;
         if(playerHit&& transform.position.z>3.75f) {
             Out();
@@ -70,9 +71,11 @@ public class Ball : MonoBehaviour
     }
 
     private void Out() {
+        if(IsInactive)
+            return;
+        IsInactive = true;
         gameEffectManager.WrongSlide(transform.position - Vector3.up*offset);
         gameManager.Out();
-        Destroy(gameObject);
     }
 
     void Grown() => transform.DOScale(0.7F, 0.2F);

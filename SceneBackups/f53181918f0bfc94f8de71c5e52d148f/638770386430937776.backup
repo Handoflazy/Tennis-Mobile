@@ -1365,6 +1365,9 @@ MonoBehaviour:
   floor: {fileID: 2100000, guid: 2416459e5546a9f4a888f9158bd2239c, type: 2}
   stadium: {fileID: 2100002, guid: 2e4ebef9cb91ffd42a9ceb007751d1a1, type: 3}
   court: {fileID: 2100000, guid: fe32240e2646fe54a888fce2e8379a6a, type: 2}
+  gameEffectManager: {fileID: 0}
+  visitors: {fileID: 0}
+  bonusDiamonds: 0
 --- !u!114 &451013520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11699,7 +11702,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3759888162332915699, guid: 53d04a193de88804d85d97acc7e1e308, type: 3}
       propertyPath: m_Center.z
-      value: 12.5
+      value: 13.5
       objectReference: {fileID: 0}
     - target: {fileID: 3759888162332915708, guid: 53d04a193de88804d85d97acc7e1e308, type: 3}
       propertyPath: m_Name
@@ -11844,10 +11847,6 @@ PrefabInstance:
     - target: {fileID: 4700453489020842344, guid: 980fd4d3118a824498c015a99cbe8359, type: 3}
       propertyPath: m_Name
       value: Ball Powerup Spawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 4700453489020842346, guid: 980fd4d3118a824498c015a99cbe8359, type: 3}
-      propertyPath: chance
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4700453489020842347, guid: 980fd4d3118a824498c015a99cbe8359, type: 3}
       propertyPath: m_RootOrder

@@ -19,7 +19,7 @@ MonoBehaviour:
   ballMoveSpeed: 10
   ballRange: 4
   force: 9.7
-  upForce: 8.5
+  upForce: 11
   powerBarSpeedMin: 4
   powerBarSpeedMax: 4.5
   powerBarMaxSlowdown: 0

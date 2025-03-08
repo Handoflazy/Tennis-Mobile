@@ -10,9 +10,9 @@ public class CourtTrigger : MonoBehaviour
         if(!other.gameObject.CompareTag("Ball"))
             return;
         Ball ball = other.gameObject.GetComponent<Ball>();
-        if(!ball.inactive) {
+        if(!ball.IsInactive) {
             courtTriggered.Raise(net);
-            ball.inactive = true;
+            ball.IsInactive = true;
         }
     }
 }

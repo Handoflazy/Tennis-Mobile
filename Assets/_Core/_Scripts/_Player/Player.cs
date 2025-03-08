@@ -63,7 +63,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         Move();
-        if (serveShot || (sensor.IsBallInRange &&ball.Value &&  !ball.Value.inactive)) Shoot();
+        if (serveShot || (sensor.IsBallInRange &&ball.Value &&  !ball.Value.IsInactive)) Shoot();
     }
 
     private void Move()
@@ -148,9 +148,9 @@ public class Player : MonoBehaviour
     private void HandleRegularShot(Vector3 direction) {
         comboNumber.Value++;
         anim.PlayAnimation(AnimConst.HIT_RIGHT_STATE);
-        ball.Value.Velocity = direction * data.Force + Vector3.up * data.UpForce;
         soundPlayer.PlayHitBallSound();
         ball.Value.Frozen(false);
+        ball.Value.Velocity = direction * data.Force + Vector3.up * data.UpForce;
         StartCoroutine(cam.Shake(SHAKE_DURATION, SHAKE_MAGNITUDE));
     }
 
