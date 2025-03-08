@@ -11,7 +11,7 @@
 - [🌟 Features](#-features)
 - [🎥 Video Demo](#-videodemo)
 - [🚀 Usage](#-usage)
-- [💻 Installation](#-installation)
+- [⚙️ Installation](#️-installation)
 - [🛠 Technologies](#-technologies)
 
   ---
