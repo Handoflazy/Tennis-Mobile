@@ -3,7 +3,7 @@
 📌 **Mobile Tennis is a casual mobile game designed to deliver a fast, simple, yet engaging experience. The project focuses on easy-to-pick-up gameplay, making it ideal for short entertainment sessions. It is built using the SOAP (Scriptable Object Architecture Pattern) to enhance flexibility and scalability in development.**
 
 
-🔗 **GitHub Repo:** [View Source](https://github.com/Handoflazy/Tennis-Mobile)
+🔗 **Source Code:** [View Source](https://github.com/Handoflazy/Tennis-Mobile](https://github.com/Handoflazy/Tennis-Mobile/tree/master/Assets/_Core/_Scripts))
 🔗 **Build APK:** [Build](https://drive.google.com/drive/folders/1aRhpawlSjqSm3Pkir4e_rYlxAfy7-0vY?usp=drive_link))
 
 ## 📖 Table of Contents
