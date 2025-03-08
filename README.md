@@ -18,13 +18,14 @@
 
 ## 🌟 Features
 
-✅ **Mobile game with mobile swipe controls**   
-✅ **Over 200 characters + character generator scripts**  
-✅ **Player character shop**  
-✅ **Tournament system**  
-✅ **Auto saving data for tournaments, characters, diamonds**  
-✅ **Powerups**    
-✅ **UI interfaces & menus**     
+✅ **Intuitive Mobile Swipe Controls – Smooth and responsive gameplay experience.
+✅ **Monetization Ready – Integrated with Unity Ads for seamless revenue generation.
+✅ **Massive Character Collection – Over 200 unique characters plus a dynamic character generator.
+✅ **In-Game Shop – Unlock and customize characters with an interactive shop system.
+✅ **Tournament Mode – Compete in thrilling tournaments and climb the leaderboard.
+✅ **Auto-Save System – Progress is automatically saved, including tournaments, characters, and in-game currency.
+✅ **Power-Ups & Boosts – Enhance gameplay with exciting power-ups.
+✅ **User-Friendly UI & Menus – Sleek and intuitive interface for an enjoyable experience.    
 
 ---
 
