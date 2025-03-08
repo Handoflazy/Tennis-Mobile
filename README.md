@@ -44,6 +44,7 @@
 ### **🔧 Prerequisites**
 
 - Install **Unity Hub**, **Unity 6**, **Visual Studio**
+- Unity Package: **SOAP** (https://assetstore.unity.com/packages/tools/utilities/soap-scriptableobject-architecture-pattern-232107)
 - Clone this repository:
 
 ```sh
@@ -55,11 +56,9 @@ git clone https://github.com/Handoflazy/Tennis-Mobile.git
 1. Open the project in **Unity Hub**
 2. Select the correct *Unity version (2021.3.45f)* and open the project
 3. Open correct Scene *(Assets/Scenes/GameScene.unity)*
-4. Click **Play** to test the game
-5. Build file .Apk*(File > Build Settings > Android > Build)*
-
----
-
+4. Import Soap Package
+5. Click **Play** to test the game
+6. Build file .Apk*(File > Build Settings > Android > Build)*
 
 ---
 ## 🛠 Technologies
