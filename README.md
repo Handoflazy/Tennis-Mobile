@@ -43,7 +43,7 @@
 
 ### **🔧 Prerequisites**
 
-- Install **Unity Hub**, **Unity 6**, **Visual Studio**
+- Install **Unity Hub**, **Unity 2021**, **Visual Studio**
 - Unity Package: **SOAP** (https://assetstore.unity.com/packages/tools/utilities/soap-scriptableobject-architecture-pattern-232107)
 - Clone this repository:
 
